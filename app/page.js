@@ -31,24 +31,11 @@ export default function Home() {
         <Faq />
         <FinalCta />
         
-        {/* NEW ON-PAGE BOOKING SECTION */}
-        <section id="book" className="bg-panel px-6 py-24 md:py-32">
-          <div className="mx-auto max-w-container">
-            <div className="mb-14 text-center">
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-copper">Take the next step</span>
-              <h2 className="mt-4 font-display text-4xl font-extrabold text-navy lg:text-5xl">
-                Schedule your strategy call
-              </h2>
-              <p className="mt-6 text-lg text-muted">
-                Choose a time below that works for you.
-              </p>
-            </div>
-            
-            {/* Passes the general GHL form URL */}
-            <ContactForm embedUrl={site.forms.general} />
-          </div>
-        </section>
-
+        {/* The new form handles its own background and headings now */}
+        <ContactForm 
+          source="General landing page" 
+          endpoint={site.forms.general} 
+        />
       </main>
       <Footer />
     </>

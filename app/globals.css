@@ -2,71 +2,96 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =============================================================
+   PALETTE  (switch to the alternate block to change the theme)
+   ============================================================= */
 :root {
-  /* ---- ACTIVE: Warm Amber / Deep Emerald / Warm Ivory ---- */
-  --navy: #1f4539;
-  --copper: #d98a3d;
-  --copper-dark: #bd7328;
-  --gold: #c7a267;
-  --paper: #fbf3e7;
-  --panel: #f3e9d7;
-  --ink: #23291f;
-  --muted: #5c6552;
-  --line: #e7dcc5;
+  --navy: #16283a;
+  --navy2: #1f3850;
+  --copper: #b5652c;
+  --copper-dark: #97511f;
+  --orange: #f2823c;
+  --orange2: #ff9a4d;
+  --gold: #c69a53;
+  --paper: #faf7f2;
+  --panel: #f1ece2;
+  --peach: #fdeadd;
+  --sky: #e7f0fb;
+  --mint: #e4f1ea;
+  --ink: #1d2733;
+  --muted: #5b6672;
+  --line: #e8e0d4;
 
-  /* Both display (headings) and sans (body) now use the modern sans-serif font */
-  --font-display: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
-  --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 90px;
+  scroll-padding-top: 88px;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  font-weight: 700; /* Increased weight to match the bold headings in the screenshot */
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-}
-
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--copper);
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--orange);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
-/* One gentle page load moment on the hero only */
-.hero-rise {
+/* ---- Scroll reveal (toggled by ScrollReveal.js) ---- */
+.reveal {
   opacity: 0;
-  transform: translateY(14px);
-  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translateY(26px);
+  transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
 }
-.hero-rise-2 { animation-delay: 0.1s; }
-.hero-rise-3 { animation-delay: 0.2s; }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: .08s; }
+.reveal.d2 { transition-delay: .16s; }
+.reveal.d3 { transition-delay: .24s; }
 
-@keyframes rise {
-  to { opacity: 1; transform: translateY(0); }
+/* ---- Gradient text ---- */
+.grad-text {
+  background: linear-gradient(100deg, var(--orange), var(--orange2) 55%, var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
+
+/* ---- Hero / section background blend ---- */
+.hero-grad {
+  background:
+    radial-gradient(1100px 520px at 82% 18%, rgba(242,130,60,.42), transparent 60%),
+    radial-gradient(900px 600px at 10% 90%, rgba(198,154,83,.22), transparent 55%),
+    linear-gradient(160deg, var(--navy) 0%, var(--navy2) 55%, #12202f 100%);
+}
+
+/* ---- Gradient button ---- */
+.btn-grad {
+  background: linear-gradient(100deg, var(--orange), var(--copper-dark));
+  box-shadow: 0 12px 28px -10px rgba(242,130,60,.6);
+  transition: transform .25s, box-shadow .25s, filter .25s;
+}
+.btn-grad:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 18px 34px -10px rgba(242,130,60,.7); }
+
+/* ---- Card hover lift ---- */
+.card-hover { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, border-color .35s; }
+.card-hover:hover { transform: translateY(-8px); box-shadow: 0 24px 50px -24px rgba(22,40,58,.45); }
+
+/* ---- Image placeholder block ---- */
+.photo { position: relative; overflow: hidden; background: linear-gradient(140deg, var(--navy2), var(--navy)); }
+.photo .tag { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.65); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-rise { animation: none; opacity: 1; transform: none; }
-  * { transition: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  * { animation: none !important; }
 }
