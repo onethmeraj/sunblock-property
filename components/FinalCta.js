@@ -2,7 +2,7 @@ import { site } from "@/lib/site";
 
 export default function FinalCta() {
   return (
-    <section id="book" className="bg-paper px-6 py-20 lg:py-32">
+       <section className="bg-paper px-6 py-20 lg:py-32">
       <div className="mx-auto max-w-container relative overflow-hidden rounded-[2.5rem] bg-navy px-8 py-20 text-center text-paper shadow-2xl">
         
         {/* Subtle Amber glow behind the text */}
