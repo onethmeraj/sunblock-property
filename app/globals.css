@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ---- ACTIVE: Warm Amber / Deep Emerald / Warm Ivory ---- */
+  --navy: #1f4539;
+  --copper: #d98a3d;
+  --copper-dark: #bd7328;
+  --gold: #c7a267;
+  --paper: #fbf3e7;
+  --panel: #f3e9d7;
+  --ink: #23291f;
+  --muted: #5c6552;
+  --line: #e7dcc5;
+
+  /* Both display (headings) and sans (body) now use the modern sans-serif font */
+  --font-display: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700; /* Increased weight to match the bold headings in the screenshot */
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* One gentle page load moment on the hero only */
+.hero-rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-rise-2 { animation-delay: 0.1s; }
+.hero-rise-3 { animation-delay: 0.2s; }
+
+@keyframes rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-rise { animation: none; opacity: 1; transform: none; }
+  * { transition: none !important; }
+}
