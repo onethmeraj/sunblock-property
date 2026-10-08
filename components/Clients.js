@@ -3,8 +3,6 @@ import { site } from "@/lib/site";
 
 export default function Clients() {
   const { heading, sub, items } = site.clients;
-  
-  // Duplicate the items array multiple times to create a seamless infinite loop
   const duplicatedItems = [...items, ...items, ...items, ...items];
 
   return (
@@ -17,13 +15,41 @@ export default function Clients() {
       </div>
 
       <div className="relative flex overflow-hidden">
-        {/* The scrolling track. Pauses when the user hovers over it to read. */}
         <div className="flex w-max animate-marquee gap-6 pl-6 hover:[animation-play-state:paused]">
           {duplicatedItems.map((item, i) => {
             const src = item.image ? (item.image.startsWith("http") ? item.image : `/${item.image}`) : null;
+            // Defaults to 5 if you forget to add a rating to an item in site.js
+            const rating = item.rating || 5; 
+
             return (
               <figure key={i} className="flex w-[350px] shrink-0 flex-col rounded-3xl bg-white p-8 border border-line shadow-sm transition-shadow hover:shadow-md">
-                <div className="text-gold">★★★★★</div>
+                
+                {/* SVG Star Rating (Bulletproof Half-Stars) */}
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((starIndex) => {
+                    const isFull = starIndex <= Math.floor(rating);
+                    const isHalf = !isFull && starIndex === Math.ceil(rating) && rating % 1 !== 0;
+
+                    return (
+                      <div key={starIndex} className="relative h-5 w-5">
+                        {/* 1. The Empty Gray Background Star */}
+                        <svg className="absolute inset-0 h-5 w-5 text-gray-200" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                        
+                        {/* 2. The Gold Overlay Star (Sliced to 50% width if isHalf is true) */}
+                        {(isFull || isHalf) && (
+                          <div className={`absolute inset-0 overflow-hidden ${isHalf ? 'w-[50%]' : 'w-full'}`}>
+                            <svg className="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
                 <blockquote className="mt-6 flex-1 font-display text-xl leading-snug text-ink">
                   “{item.quote}”
                 </blockquote>
@@ -45,7 +71,6 @@ export default function Clients() {
           })}
         </div>
         
-        {/* Inject the CSS animation directly into the component */}
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes marquee {
             0% { transform: translateX(0); }
@@ -58,4 +83,4 @@ export default function Clients() {
       </div>
     </section>
   );
-}
+} 

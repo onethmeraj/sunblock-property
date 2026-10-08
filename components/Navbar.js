@@ -10,15 +10,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-paper text-ink shadow-sm">
       <div className="mx-auto flex max-w-container items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2 text-xl font-extrabold tracking-tight">
-          <span
-            className="grid h-8 w-8 place-items-center rounded-full text-sm text-paper"
-            style={{ background: "linear-gradient(135deg,var(--copper),var(--copper-dark))" }}
-          >
-            ☀
-          </span>
-          <span className="text-navy">{site.brandName}</span>
-        </Link>
+      <Link href="/" className="flex items-center">
+  {/* Change 'logo.png' if your file has a different name or extension like .svg */}
+  <img src="/logo.png" alt={site.brandName} className="h-10 w-auto object-contain" />
+</Link>
 
         <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
           {site.nav.map((item) => (

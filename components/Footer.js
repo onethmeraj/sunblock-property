@@ -10,15 +10,10 @@ export default function Footer() {
         <div className="flex flex-col justify-between gap-8 md:flex-row">
           
           <div className="max-w-sm">
-            <div className="flex items-center gap-2 text-xl font-extrabold text-paper">
-              <span 
-                className="grid h-7 w-7 place-items-center rounded-full text-sm" 
-                style={{ background: "linear-gradient(135deg,var(--copper),var(--copper-dark))" }}
-              >
-                ☀
-              </span>
-              {site.brandName}
-            </div>
+           <div className="flex items-center">
+  {/* Change 'logo.png' if your file has a different name. Use a white/light version here if your footer is dark. */}
+  <img src="/logo.png" alt={site.brandName} className="h-10 w-auto object-contain" />
+</div>
             <p className="mt-4 text-sm text-paper opacity-70 leading-relaxed">
               {site.footer.blurb}
             </p>

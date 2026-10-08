@@ -2,24 +2,27 @@ import { site } from "@/lib/site";
 
 export default function FinalCta() {
   return (
-       <section className="bg-paper px-6 py-20 lg:py-32">
-      <div className="mx-auto max-w-container relative overflow-hidden rounded-[2.5rem] bg-navy px-8 py-20 text-center text-paper shadow-2xl">
-        
-        {/* Subtle Amber glow behind the text */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(217,138,61,0.15),transparent_70%)]" />
-
-        <div className="relative z-10 mx-auto max-w-2xl">
-          <h2 className="font-display text-4xl font-extrabold leading-tight lg:text-5xl">
-            {site.finalCta.heading}
+    <section className="bg-paper px-6 py-20 pb-32">
+      <div className="mx-auto max-w-container">
+        <div className="reveal flex flex-col items-center rounded-[2.5rem] bg-navy px-6 py-20 text-center shadow-2xl sm:px-12 sm:py-24">
+          
+          <h2 className="font-display text-4xl font-extrabold leading-[1.15] text-white sm:text-5xl">
+            Book a call and get clarity on <br className="hidden sm:block" /> your next move
           </h2>
-          <p className="mt-6 text-lg text-paper/80">
-            {site.finalCta.sub}
+          
+          {/* THE FIX: Changed text color to text-white/90 for maximum contrast and readability */}
+          <p className="mt-6 max-w-2xl text-lg text-white/90 text-balance">
+            A short, no pressure conversation about where you are and what could come next.
           </p>
-          <a href={site.bookingUrl} className="mt-10 inline-block rounded-full bg-copper px-10 py-4 font-bold text-white shadow-lg transition-all hover:-translate-y-1 hover:bg-copper-dark hover:shadow-xl">
-            {site.ctaLabel}
+          
+          <a 
+            href={site.bookingUrl} 
+            className="mt-10 inline-block rounded-full bg-copper px-8 py-4 font-bold text-paper shadow-lg shadow-copper/20 transition-all hover:-translate-y-1 hover:shadow-xl hover:bg-copper-dark"
+          >
+            Book a call
           </a>
+          
         </div>
-        
       </div>
     </section>
   );

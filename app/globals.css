@@ -3,26 +3,37 @@
 @tailwind utilities;
 
 /* =============================================================
-   PALETTE  (switch to the alternate block to change the theme)
+   SUNBLOCK PROPERTY - PREMIUM CONVERSION PALETTE
    ============================================================= */
 :root {
-  --navy: #16283a;
-  --navy2: #1f3850;
-  --copper: #b5652c;
-  --copper-dark: #97511f;
-  --orange: #f2823c;
-  --orange2: #ff9a4d;
-  --gold: #c69a53;
-  --paper: #faf7f2;
-  --panel: #f1ece2;
-  --peach: #fdeadd;
-  --sky: #e7f0fb;
-  --mint: #e4f1ea;
-  --ink: #1d2733;
-  --muted: #5b6672;
-  --line: #e8e0d4;
+  /* Core Brand Colors */
+  --navy: #135b3b;         /* Primary: Deep Forest Green (replaces old navy) */
+  --navy2: #0d432b;        /* Secondary Dark: Richer green for depth and gradients */
+  
+  /* Conversion & Accent Colors */
+  --copper: #fd7335;       /* Primary CTA: Vibrant Orange */
+  --copper-dark: #e55c1e;  /* Hover CTA: Deep Orange for tactile button feedback */
+  --orange: #fd7335;       /* Unified with brand orange */
+  --orange2: #ff8e59;      /* Lighter orange for subtle highlights */
+  
+  --gold: #b28751;         /* Muted, classy gold matching the "PROPERTY" logo text */
+  
+  /* Backgrounds & Surfaces */
+  --paper: #fcfcfb;        /* Crisp, premium off-white for high readability */
+  --panel: #f3f1ec;        /* Subtle secondary background for contrast sections */
+  
+  /* UI Accents (Chips, tags, borders) */
+  --peach: #ffede3;        
+  --sky: #e6f0eb;          /* Soft green tint */
+  --mint: #dcf0e5;         
+  
+  /* Typography */
+  --ink: #11241a;          /* Very dark green-tinted charcoal for striking, legible text */
+  --muted: #576b60;        /* Classy muted text that harmonizes with the brand green */
+  --line: #e3ded5;         /* Elegant, subtle borders */
 
-  --font-display: "Cormorant Garamond", Georgia, serif;
+  /* Global Typography Override (Modern Geometric Sans) */
+  --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
@@ -66,25 +77,29 @@ a:focus-visible, button:focus-visible {
   color: transparent;
 }
 
-/* ---- Hero / section background blend ---- */
+/* ---- Hero / section background blend (Updated to Green & Orange) ---- */
 .hero-grad {
   background:
-    radial-gradient(1100px 520px at 82% 18%, rgba(242,130,60,.42), transparent 60%),
-    radial-gradient(900px 600px at 10% 90%, rgba(198,154,83,.22), transparent 55%),
-    linear-gradient(160deg, var(--navy) 0%, var(--navy2) 55%, #12202f 100%);
+    radial-gradient(1100px 520px at 82% 18%, rgba(253,115,53,.30), transparent 60%),
+    radial-gradient(900px 600px at 10% 90%, rgba(178,135,81,.15), transparent 55%),
+    linear-gradient(160deg, var(--navy) 0%, var(--navy2) 55%, #082d1c 100%);
 }
 
-/* ---- Gradient button ---- */
+/* ---- High-Conversion Gradient Button ---- */
 .btn-grad {
   background: linear-gradient(100deg, var(--orange), var(--copper-dark));
-  box-shadow: 0 12px 28px -10px rgba(242,130,60,.6);
+  box-shadow: 0 12px 28px -10px rgba(253,115,53,.6);
   transition: transform .25s, box-shadow .25s, filter .25s;
 }
-.btn-grad:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 18px 34px -10px rgba(242,130,60,.7); }
+.btn-grad:hover { 
+  transform: translateY(-2px); 
+  filter: brightness(1.05); 
+  box-shadow: 0 18px 34px -10px rgba(253,115,53,.75); 
+}
 
 /* ---- Card hover lift ---- */
 .card-hover { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, border-color .35s; }
-.card-hover:hover { transform: translateY(-8px); box-shadow: 0 24px 50px -24px rgba(22,40,58,.45); }
+.card-hover:hover { transform: translateY(-8px); box-shadow: 0 24px 50px -24px rgba(19,91,59,.25); }
 
 /* ---- Image placeholder block ---- */
 .photo { position: relative; overflow: hidden; background: linear-gradient(140deg, var(--navy2), var(--navy)); }

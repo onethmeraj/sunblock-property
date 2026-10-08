@@ -1,98 +1,89 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { site } from "@/lib/site";
 
-// This small helper function handles the math for the smooth counting animation
-function useCountUp(endString, inView) {
+// Helper component to animate numbers on scroll
+function AnimatedCounter({ text }) {
   const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const timerRef = useRef(null);
 
-  useEffect(() => {
-    if (!inView || !endString) return;
-    
-    // Extract just the numbers from the string (e.g., "500+" becomes 500)
-    const numericPart = parseInt(endString.replace(/\D/g, ""), 10);
-    if (isNaN(numericPart)) {
-      setCount(endString);
-      return;
-    }
+  const numMatch = text.match(/\d+/);
+  const targetNumber = numMatch ? parseInt(numMatch[0], 10) : 0;
+  const suffix = text.replace(/[0-9]/g, "");
 
-    let start = 0;
-    const duration = 2000; // Animation takes exactly 2 seconds
-    const increment = numericPart / (duration / 16); 
-
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= numericPart) {
-        setCount(numericPart);
-        clearInterval(timer);
-      } else {
-        setCount(Math.ceil(start));
-      }
-    }, 16);
-
-    return () => clearInterval(timer);
-  }, [endString, inView]);
-
-  // Reattach any plus signs (e.g., puts the "+" back on "500+")
-  if (typeof count === "number" && endString) {
-    return endString.replace(/[0-9]+/, count);
-  }
-  return endString || "";
-}
-
-export default function Stats() {
-  const { stats } = site;
-  const [inView, setInView] = useState(false);
-  const sectionRef = useRef(null);
-
-  // This watches the screen. When this section scrolls into view, it triggers the animation.
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
+        // When the section enters the screen, start the animation
         if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect(); // Only animate once
+          setCount(0);
+          let start = 0;
+          const duration = 2000; 
+          const increment = targetNumber / (duration / 16); 
+
+          if (timerRef.current) clearInterval(timerRef.current);
+          
+          timerRef.current = setInterval(() => {
+            start += increment;
+            if (start >= targetNumber) {
+              clearInterval(timerRef.current);
+              setCount(targetNumber);
+            } else {
+              setCount(Math.floor(start));
+            }
+          }, 16);
+        } else {
+          // When the section leaves the screen, reset everything
+          if (timerRef.current) clearInterval(timerRef.current);
+          setCount(0);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.5 } 
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
-  const hasData = stats.some(stat => stat.value);
-  if (!hasData) return null;
+    if (ref.current) observer.observe(ref.current);
+    
+    return () => {
+      observer.disconnect();
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [targetNumber]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-navy py-24 px-6 border-b border-white/5">
-      
-      {/* Premium Touch: A subtle warm amber glow at the top of the section */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(217,138,61,0.08),transparent_50%)]" />
-      
-      <div className="relative z-10 mx-auto max-w-container">
-        <h2 className="text-center font-display text-3xl font-bold text-paper mb-16 md:mb-24">
-          A more supported way to invest
-        </h2>
+    <span ref={ref}>
+      {count}{suffix}
+    </span>
+  );
+}
 
-        <div className="flex flex-col items-center justify-center gap-16 md:flex-row md:gap-32 text-center">
-          {stats.map((stat, i) => {
-            const animatedValue = useCountUp(stat.value, inView);
-            
-            return (
-              <div key={i} className="flex flex-col items-center">
-                <div className="font-display text-6xl md:text-7xl font-extrabold text-copper mb-4 tracking-tight drop-shadow-lg">
-                  {stat.value ? animatedValue : "-"}
+export default function Stats() {
+  const heading = site.stats?.heading || "A more supported way to invest";
+  const items = site.stats?.items || [];
+
+  return (
+    <section className="bg-navy py-16 text-paper">
+      <div className="mx-auto max-w-container px-6 text-center">
+        <h2 className="mb-12 font-display text-2xl font-semibold text-paper/90 sm:text-3xl">
+          {heading}
+        </h2>
+        
+        {items.length > 0 && (
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-3 divide-y divide-white/10 sm:divide-y-0 sm:divide-x">
+            {items.map((item, i) => (
+              <div key={i} className="flex flex-col items-center pt-8 sm:pt-0">
+                <div className="font-display text-5xl font-bold text-orange sm:text-6xl">
+                  <AnimatedCounter text={item.value || "0"} />
                 </div>
-                
-                {/* Bug fixed here: Replaced text-paper/60 with solid text-paper + opacity class */}
-                <div className="text-sm font-bold uppercase tracking-[0.2em] text-paper opacity-80">
-                  {stat.label}
+                <div className="mt-3 text-sm font-bold uppercase tracking-widest text-paper/70">
+                  {item.label}
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
+        
       </div>
     </section>
   );
