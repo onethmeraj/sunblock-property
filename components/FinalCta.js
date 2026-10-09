@@ -1,27 +1,31 @@
-import { site } from "@/lib/site";
+// components/FinalCta.js
 
 export default function FinalCta() {
   return (
-    <section className="bg-paper px-6 py-20 pb-32">
-      <div className="mx-auto max-w-container">
-        <div className="reveal flex flex-col items-center rounded-[2.5rem] bg-navy px-6 py-20 text-center shadow-2xl sm:px-12 sm:py-24">
+    // Changed py-24/py-32 to pt-4 pb-8 lg:pt-6 lg:pb-12 to cut the top & bottom gap
+    <section className="relative bg-paper pt-4 pb-8 lg:pt-6 lg:pb-12">
+      <div className="mx-auto max-w-container px-6">
+        
+        {/* Tightened internal padding from py-20/p-16 down to py-12 px-6 lg:py-16 lg:px-12 */}
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-navy py-12 px-6 text-center shadow-2xl lg:py-16 lg:px-12">
           
-          <h2 className="font-display text-4xl font-extrabold leading-[1.15] text-white sm:text-5xl">
-            Book a call and get clarity on <br className="hidden sm:block" /> your next move
+          <h2 className="mx-auto max-w-2xl font-display text-[clamp(2rem,3.5vw,3rem)] font-extrabold leading-[1.15] text-white">
+            Book a call and get clarity on your next move
           </h2>
           
-          {/* THE FIX: Changed text color to text-white/90 for maximum contrast and readability */}
-          <p className="mt-6 max-w-2xl text-lg text-white/90 text-balance">
+          <p className="mx-auto mt-4 max-w-md text-base text-gray-200 lg:text-lg">
             A short, no pressure conversation about where you are and what could come next.
           </p>
           
-          <a 
-            href={site.bookingUrl} 
-            className="mt-10 inline-block rounded-full bg-copper px-8 py-4 font-bold text-paper shadow-lg shadow-copper/20 transition-all hover:-translate-y-1 hover:shadow-xl hover:bg-copper-dark"
-          >
-            Book a call
-          </a>
-          
+          <div className="mt-8 flex justify-center">
+            <a 
+              href="/book-a-call" 
+              className="inline-block rounded-full bg-copper px-8 py-4 font-bold text-white shadow-lg shadow-copper/25 transition-all hover:-translate-y-0.5 hover:bg-copper-dark"
+            >
+              Book a call
+            </a>
+          </div>
+
         </div>
       </div>
     </section>

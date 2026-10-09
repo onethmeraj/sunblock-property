@@ -64,7 +64,10 @@ export default function BookACallPage() {
       } else {
         await new Promise((r) => setTimeout(r, 800)); // Simulate network request
       }
+      
+      // Update status to success to trigger the calendar iframe
       setStatus("success");
+      
     } catch {
       setStatus("error");
     }
@@ -81,10 +84,6 @@ export default function BookACallPage() {
       <ScrollReveal />
       <Navbar />
       
-      {/* 
-        MAIN LAYOUT: Dark gradient background wrapping the whole page.
-        lg:grid-cols-[0.9fr_1.1fr] creates the two-column split, giving the form slightly more room.
-      */}
       <main className="hero-grad relative overflow-hidden text-paper min-h-[90vh]">
         <div className="relative mx-auto grid max-w-container items-center gap-12 px-6 py-12 md:py-20 lg:grid-cols-[0.9fr_1.1fr]">
           
@@ -135,84 +134,91 @@ export default function BookACallPage() {
             </figure>
           </div>
 
-          {/* RIGHT COLUMN: The Pill-Shaped Form */}
+          {/* RIGHT COLUMN: The Form / Calendar Container */}
           <div className="reveal d1 w-full rounded-[2rem] bg-white shadow-2xl overflow-hidden relative">
-            <div className="pt-8 pb-4 px-8 sm:px-10">
-              <h2 className="font-display text-2xl font-bold text-navy">Your Details</h2>
-            </div>
-
+            
             {status === "success" ? (
-              <div className="p-16 text-center min-h-[400px] flex flex-col justify-center items-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 mb-6">
-                  <Check className="h-8 w-8" strokeWidth={3} />
-                </div>
-                <h3 className="font-display text-2xl font-bold text-ink">Request Received</h3>
-                <p className="mt-3 text-muted max-w-xs">We have your details and will be in touch shortly to arrange your call.</p>
+              // Embedded GHL Calendar - Fixed Scrolling & Height
+              <div className="w-full bg-white relative p-2 sm:p-4">
+                <iframe
+                  src="https://api.leadconnectorhq.com/widget/booking/1MzdLOjOF7kLrcs0lCMP"
+                  style={{ width: "100%", height: "800px", border: "none" }}
+                  scrolling="yes"
+                  id="ghl-calendar"
+                  className="w-full rounded-xl"
+                  title="Book a Call Calendar"
+                ></iframe>
               </div>
             ) : (
-              <form onSubmit={handleSubmit}>
-                <div className="px-8 sm:px-10 pb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Personal Details */}
-                  <div>
-                    <input required className={inputClass} placeholder="First name*" value={form.firstName} onChange={set("firstName")} />
-                  </div>
-                  <div>
-                    <input required className={inputClass} placeholder="Last name*" value={form.lastName} onChange={set("lastName")} />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <input required type="email" className={inputClass} placeholder="Email address*" value={form.email} onChange={set("email")} />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <input required type="tel" className={inputClass} placeholder="Phone number*" value={form.phone} onChange={set("phone")} />
-                  </div>
-                  
-                  {/* Investment Profile Split */}
-                  <div className="sm:col-span-2 mt-2">
-                    <span className="ml-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Investment Profile</span>
+              // Contact Form
+              <>
+                <div className="pt-8 pb-4 px-8 sm:px-10">
+                  <h2 className="font-display text-2xl font-bold text-navy">Your Details</h2>
+                </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="px-8 sm:px-10 pb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Personal Details */}
+                    <div>
+                      <input required className={inputClass} placeholder="First name*" value={form.firstName} onChange={set("firstName")} />
+                    </div>
+                    <div>
+                      <input required className={inputClass} placeholder="Last name*" value={form.lastName} onChange={set("lastName")} />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <input required type="email" className={inputClass} placeholder="Email address*" value={form.email} onChange={set("email")} />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <input required type="tel" className={inputClass} placeholder="Phone number*" value={form.phone} onChange={set("phone")} />
+                    </div>
+                    
+                    {/* Investment Profile Split */}
+                    <div className="sm:col-span-2 mt-2">
+                      <span className="ml-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Investment Profile</span>
+                    </div>
+
+                    <div>
+                      <select required className={selectClass} value={form.budget} onChange={set("budget")}>
+                        <option value="" disabled>Approximate budget*</option>
+                        {BUDGETS.map((o) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <select required className={selectClass} value={form.timeline} onChange={set("timeline")}>
+                        <option value="" disabled>Purchase timeline*</option>
+                        {TIMELINE.map((o) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <select required className={selectClass} value={form.basedIn} onChange={set("basedIn")}>
+                        <option value="" disabled>Currently based in*</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Overseas">Overseas</option>
+                      </select>
+                    </div>
+                    <div>
+                      <select required className={selectClass} value={form.investedBefore} onChange={set("investedBefore")}>
+                        <option value="" disabled>Invested before?*</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No (First-time)</option>
+                      </select>
+                    </div>
                   </div>
 
-                  <div>
-                    <select required className={selectClass} value={form.budget} onChange={set("budget")}>
-                      <option value="" disabled>Approximate budget*</option>
-                      {BUDGETS.map((o) => <option key={o} value={o}>{o}</option>)}
-                    </select>
+                  {/* Form Footer / Submit Area */}
+                  <div className="bg-[#f8fbff] px-8 sm:px-10 py-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-[11px] text-muted max-w-[250px] leading-relaxed">
+                      By clicking submit, you agree to our privacy policy and terms of service.
+                    </div>
+                    <button 
+                      type="submit" 
+                      disabled={status === "submitting"}
+                      className="w-full sm:w-auto rounded-full bg-navy hover:bg-copper transition-colors px-10 py-3.5 font-bold text-white shadow-md disabled:opacity-70 flex items-center justify-center gap-2"
+                    >
+                      {status === "submitting" ? "Sending..." : "Submit Request"}
+                    </button>
                   </div>
-                  <div>
-                    <select required className={selectClass} value={form.timeline} onChange={set("timeline")}>
-                      <option value="" disabled>Purchase timeline*</option>
-                      {TIMELINE.map((o) => <option key={o} value={o}>{o}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <select required className={selectClass} value={form.basedIn} onChange={set("basedIn")}>
-                      <option value="" disabled>Currently based in*</option>
-                      <option value="Australia">Australia</option>
-                      <option value="Overseas">Overseas</option>
-                    </select>
-                  </div>
-                  <div>
-                    <select required className={selectClass} value={form.investedBefore} onChange={set("investedBefore")}>
-                      <option value="" disabled>Invested before?*</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No (First-time)</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Form Footer / Submit Area */}
-                <div className="bg-[#f8fbff] px-8 sm:px-10 py-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-[11px] text-muted max-w-[250px] leading-relaxed">
-                    By clicking submit, you agree to our privacy policy and terms of service.
-                  </div>
-                  <button 
-                    type="submit" 
-                    disabled={status === "submitting"}
-                    className="w-full sm:w-auto rounded-full bg-navy hover:bg-copper transition-colors px-10 py-3.5 font-bold text-white shadow-md disabled:opacity-70 flex items-center justify-center gap-2"
-                  >
-                    {status === "submitting" ? "Sending..."   : "Submit Request"}
-                  </button>
-                </div>
-              </form>
+                </form>
+              </>
             )}
           </div>
 
@@ -222,4 +228,4 @@ export default function BookACallPage() {
       <Footer />
     </>
   );
-}
+} 

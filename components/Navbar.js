@@ -10,11 +10,13 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-paper text-ink shadow-sm">
       <div className="mx-auto flex max-w-container items-center justify-between px-6 py-4">
-      <Link href="/" className="flex items-center">
-  {/* Change 'logo.png' if your file has a different name or extension like .svg */}
-  <img src="/logo.png" alt={site.brandName} className="h-10 w-auto object-contain" />
+   <Link href="/" className="flex items-center py-2 shrink-0">
+  <img 
+    src="/logo.png" 
+    alt="Sunblock Property" 
+    className="h-16 sm:h-20 md:h-24 w-auto min-w-[160px] sm:min-w-[200px] md:min-w-[240px] max-w-none object-contain scale-125 sm:scale-135 origin-left transition-transform duration-200" 
+  />
 </Link>
-
         <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
           {site.nav.map((item) => (
             <a key={item.href} href={item.href} className="text-ink/70 transition-colors hover:text-copper">

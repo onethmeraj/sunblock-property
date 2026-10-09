@@ -4,7 +4,9 @@ export default function VideoSection() {
   const { heading, sub, embedUrl } = site.video;
 
   return (
-    <section id="video" className="bg-paper py-20 md:py-32">
+  // Inside components/VideoSection.js:
+// Replace the outer <section> tag with:
+<section className="relative bg-panel border-t border-line pt-10 pb-14 lg:pt-14 lg:pb-16">
       <div className="mx-auto max-w-container px-6">
         <div className="reveal mx-auto max-w-2xl text-center">
           
