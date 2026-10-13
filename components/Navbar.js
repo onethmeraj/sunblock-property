@@ -31,9 +31,11 @@ export default function Navbar() {
             <span className="h-1.5 w-1.5 rounded-full bg-copper" />
             {site.seminar.label}
           </Link>
-          <a href={site.bookingUrl} className="rounded-full bg-copper px-5 py-2.5 font-semibold text-paper shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          
+          {/* THE FIX: Upgraded to Next.js <Link> pointing directly to your new page */}
+          <Link href="/book-a-call" className="rounded-full bg-copper px-5 py-2.5 font-semibold text-paper shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
             {site.ctaLabel}
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile Hamburger Button */}
@@ -58,11 +60,13 @@ export default function Navbar() {
           <Link href={site.seminar.href} onClick={() => setOpen(false)} className="block border-b border-line py-3 font-semibold text-copper">
             {site.seminar.label}
           </Link>
-          <a href={site.bookingUrl} onClick={() => setOpen(false)} className="mt-4 block rounded-full bg-copper px-5 py-3 text-center font-semibold text-paper shadow-sm">
+          
+          {/* THE FIX: Upgraded Mobile CTA to  Next.js <Link> pointing directly to your new page */}
+          <Link href="/book-a-call" onClick={() => setOpen(false)} className="mt-4 block rounded-full bg-copper px-5 py-3 text-center font-semibold text-paper shadow-sm">
             {site.ctaLabel}
-          </a>
+          </Link>
         </nav>
       )}
     </header>
   );
-} 
+}

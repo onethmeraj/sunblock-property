@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Clock, MapPin, Check, X } from "lucide-react"; 
+import { Calendar, Clock, MapPin, Check, X, Tag } from "lucide-react"; 
 import ScrollReveal from "@/components/ScrollReveal";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,7 +27,6 @@ export default function SeminarPage() {
   });
   const [status, setStatus] = useState("idle");
 
-  // META PIXEL SCROLL TRACKING
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -56,7 +55,6 @@ export default function SeminarPage() {
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  // META PIXEL LEAD TRACKING ON FORM SUBMISSION
   async function handleSubmit(e) {
     e.preventDefault();
     setStatus("submitting");
@@ -72,7 +70,6 @@ export default function SeminarPage() {
         await new Promise((r) => setTimeout(r, 800));
       }
       
-      // Fire Meta Pixel Lead Event
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'Lead');
       }
@@ -83,7 +80,6 @@ export default function SeminarPage() {
     }
   }
 
-  // META PIXEL BUTTON CLICK TRACKING
   const handleButtonClick = () => {
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq('trackCustom', 'Clicked_Register_Seminar');
@@ -109,7 +105,6 @@ export default function SeminarPage() {
                   {s.eyebrow || "Upcoming Seminar"}
                 </span>
 
-                {/* Solid Ink Headline */}
                 <h1 className="reveal d1 mt-3 font-display text-[clamp(2.35rem,4.5vw,3.75rem)] font-extrabold leading-[1.12] tracking-tight text-ink">
                   {s.name || "Property Investment Seminar"}
                 </h1>
@@ -118,12 +113,13 @@ export default function SeminarPage() {
                   {s.tagline || "Learn how to invest in Australian property with clarity and confidence."}
                 </p>
 
-                {/* Event Metadata Badges */}
+                {/* THE FIX: Added Tag icon for the cost field */}
                 <div className="reveal d2 mt-6 flex flex-wrap gap-2.5">
                   {[
                     { icon: Calendar, label: s.date || "Date to be confirmed" },
                     { icon: Clock, label: s.time || "Time to be confirmed" },
                     { icon: MapPin, label: s.venue?.name || "Venue to be confirmed" },
+                    { icon: Tag, label: s.cost || "Free, in person" },
                   ].map(({ icon: I, label }, i) => (
                     <span key={i} className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 text-xs font-medium text-ink shadow-sm sm:text-sm">
                       <I className="h-4 w-4 text-orange" /> {label}
@@ -131,7 +127,6 @@ export default function SeminarPage() {
                   ))}
                 </div>
 
-                {/* Enhanced & Highlighted Offers / Reward Cards */}
                 <div className="reveal d3 mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {s.offers && s.offers.length > 0 ? (
                     s.offers.map((o, i) => {
@@ -164,41 +159,10 @@ export default function SeminarPage() {
                         </div>
                       );
                     })
-                  ) : (
-                    <>
-                      {/* Fallback Attendee Bonus */}
-                      <div className="relative overflow-hidden rounded-2xl border-2 border-orange/30 bg-gradient-to-br from-orange/5 via-white to-white p-5 shadow-sm transition-all hover:border-orange/50 hover:shadow-md">
-                        <div className="flex items-start gap-3.5">
-                          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-orange/15 text-orange">
-                            <Icon name="gift" className="h-5 w-5" strokeWidth={2} />
-                          </span>
-                          <div>
-                            <div className="text-2xl font-black tracking-tight text-orange leading-none">A$5,000</div>
-                            <h3 className="mt-1 text-sm font-bold text-ink">Attendee bonus</h3>
-                            <p className="mt-1 text-xs text-muted leading-relaxed">Register and attend to unlock an exclusive bonus. Terms and conditions apply.</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Fallback Referral Reward */}
-                      <div className="relative overflow-hidden rounded-2xl border-2 border-navy/25 bg-gradient-to-br from-navy/5 via-white to-white p-5 shadow-sm transition-all hover:border-navy/40 hover:shadow-md">
-                        <div className="flex items-start gap-3.5">
-                          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-navy/15 text-navy">
-                            <Icon name="users" className="h-5 w-5" strokeWidth={2} />
-                          </span>
-                          <div>
-                            <div className="text-2xl font-black tracking-tight text-navy leading-none">A$2,700</div>
-                            <h3 className="mt-1 text-sm font-bold text-ink">Referral reward</h3>
-                            <p className="mt-1 text-xs text-muted leading-relaxed">Refer a friend who works with us and earn a referral reward. Terms and conditions apply.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  ) : null}
                 </div>
               </div>
 
-              {/* REGISTRATION FORM */}
               <div id="book" className="reveal d2 relative w-full rounded-[2rem] bg-white shadow-xl border border-line overflow-hidden">
                 <div className="pt-6 pb-4 px-6 sm:px-8 border-b border-line bg-gray-50/60">
                   <h3 className="font-display text-2xl font-bold text-ink">Reserve your seat</h3>
@@ -253,7 +217,6 @@ export default function SeminarPage() {
                       </div>
                     </div>
 
-                    {/* Single-Line Action Button & Terms */}
                     <div className="bg-[#f8fbff] px-6 sm:px-8 py-5 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4">
                       <p className="text-xs text-muted leading-relaxed sm:max-w-[200px]">
                         By registering, you agree to our{" "}
@@ -276,7 +239,7 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* STATS / TRUST BANNER */}
+        {/* The rest of the sections (Stats, Comparison, Agenda, Case Studies, etc.) remain untouched... */}
         <section className="bg-panel py-10 md:py-12 border-y border-line relative z-10">
           <div className="mx-auto max-w-container px-6 text-center reveal">
             <h2 className="text-2xl md:text-3xl font-extrabold text-navy mb-8">
@@ -299,7 +262,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* COMPARISON SECTION */}
         <section className="bg-white py-12 md:py-16">
           <div className="mx-auto max-w-container px-6">
             <div className="reveal text-center max-w-3xl mx-auto mb-10 md:mb-14">
@@ -359,7 +321,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* AGENDA SECTION */}
         <section className="bg-panel border-t border-line">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16">
             <div className="reveal max-w-2xl">
@@ -392,7 +353,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* CASE STUDIES SECTION */}
         <section className="bg-white">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16 border-t border-line">
             <div className="reveal mb-8">
@@ -466,7 +426,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* MEET KAUSHI SECTION */}
         <section className="bg-panel overflow-hidden border-t border-line">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16">
             <div className="grid gap-8 md:grid-cols-2 items-center">
@@ -498,7 +457,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* SPEAKERS SECTION: Tarindu & The Solicitor */}
         <section className="bg-white border-t border-line py-12 md:py-16">
           <div className="mx-auto max-w-container px-6">
             
@@ -516,8 +474,6 @@ export default function SeminarPage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
-              
-              {/* Speaker 1: Tarindu */}
               <div className="reveal d1 rounded-2xl border border-line bg-panel p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-5 transition-all hover:border-orange/40 hover:shadow-md">
                 <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-2xl bg-gray-200 shadow-inner">
                   <img 
@@ -542,7 +498,6 @@ export default function SeminarPage() {
                 </div>
               </div>
 
-              {/* Speaker 2: The Solicitor */}
               <div className="reveal d2 rounded-2xl border border-line bg-panel p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-5 transition-all hover:border-navy/40 hover:shadow-md">
                 <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-2xl bg-gray-200 shadow-inner">
                   <img 
@@ -571,7 +526,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* FAQ SECTION */}
         <section className="bg-panel border-t border-line">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16">
             <div className="reveal max-w-2xl mb-8">
@@ -602,7 +556,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* FINAL CTA BANNER */}
         <section className="bg-white px-6 py-12 md:py-16">
           <div className="mx-auto max-w-container">
             <div className="reveal flex flex-col md:flex-row items-center justify-between gap-8 rounded-[2rem] bg-navy p-8 md:p-12 shadow-2xl relative overflow-hidden">

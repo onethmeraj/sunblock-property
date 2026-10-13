@@ -38,12 +38,12 @@ export default function BookACallPage() {
   // 3-Second Rotation Logic
   useEffect(() => {
     const interval = setInterval(() => {
-      setFade(true); // Start fade out
+      setFade(true); 
       setTimeout(() => {
         setReviewIndex((prev) => (prev + 1) % REVIEWS.length);
-        setFade(false); // Fade back in
-      }, 300); // 300ms transition duration
-    }, 3000); // 3 seconds per review
+        setFade(false); 
+      }, 300); 
+    }, 3000); 
 
     return () => clearInterval(interval);
   }, []);
@@ -59,10 +59,10 @@ export default function BookACallPage() {
         await fetch(site.forms.general, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, source: "Book A Call Page" }), // CRM Routing Tag
+          body: JSON.stringify({ ...form, source: "Book A Call Page" }), 
         });
       } else {
-        await new Promise((r) => setTimeout(r, 800)); // Simulate network request
+        await new Promise((r) => setTimeout(r, 800)); 
       }
       
       // Update status to success to trigger the calendar iframe
@@ -73,9 +73,9 @@ export default function BookACallPage() {
     }
   }
 
-  // Pill-shaped input styling
-  const inputClass = "w-full rounded-full bg-gray-100/80 px-6 py-3.5 text-sm text-ink outline-none transition-all placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-copper/50";
-  const selectClass = "w-full rounded-full bg-gray-100/80 px-6 py-3.5 text-sm text-ink outline-none transition-all focus:bg-white focus:ring-2 focus:ring-copper/50 appearance-none cursor-pointer";
+  // Premium ghost-white input styling matching the homepage form
+  const inputClass = "w-full rounded-2xl border-none bg-gray-100/80 px-5 py-4 text-sm text-ink outline-none transition-all placeholder:text-gray-400 focus:bg-gray-200 focus:ring-2 focus:ring-navy/20";
+  const selectClass = "w-full rounded-2xl border-none bg-gray-100/80 px-5 py-4 text-sm text-ink outline-none transition-all focus:bg-gray-200 focus:ring-2 focus:ring-navy/20 appearance-none cursor-pointer";
 
   const currentReview = REVIEWS[reviewIndex];
 
@@ -84,58 +84,61 @@ export default function BookACallPage() {
       <ScrollReveal />
       <Navbar />
       
-      <main className="hero-grad relative overflow-hidden text-paper min-h-[90vh]">
-        <div className="relative mx-auto grid max-w-container items-center gap-12 px-6 py-12 md:py-20 lg:grid-cols-[0.9fr_1.1fr]">
+      {/* THE FIX: Changed to the premium Ghost White background */}
+      <main className="bg-[#f8f9fa] relative overflow-hidden min-h-[90vh] pt-12 pb-24 md:pt-20 md:pb-32">
+        <div className="relative mx-auto grid max-w-container items-start gap-12 px-6 lg:grid-cols-[1fr_1.1fr]">
           
           {/* LEFT COLUMN: Copy & Trust Signals */}
-          <div className="reveal flex flex-col h-full justify-center">
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-orange2">
+          <div className="reveal flex flex-col h-full justify-start sticky top-32">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-copper">
               Get in touch
             </span>
-            <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] font-bold leading-tight">
+            
+            <h1 className="mt-4 font-display text-[clamp(2.5rem,4vw,3.5rem)] font-extrabold leading-[1.1] text-navy">
               Schedule your strategy call
             </h1>
-            <p className="mt-5 max-w-md text-paper/80 leading-relaxed">
+            
+            <p className="mt-5 max-w-md text-base md:text-lg text-muted leading-relaxed">
               Select a time that works best for you below. We will come back with clear, honest next steps tailored to your goals.
             </p>
 
             {/* Trust Bullets */}
             <ul className="mt-8 space-y-4">
               {TRUST_BULLETS.map((t, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-white/10 text-orange2">
-                    <Check className="h-4 w-4" strokeWidth={2.4} />
+                <li key={i} className="flex items-center gap-3.5">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-copper/20 text-copper">
+                    <Check className="h-4 w-4" strokeWidth={3} />
                   </span>
-                  <span className="text-paper/90">{t}</span>
+                  <span className="font-semibold text-ink">{t}</span>
                 </li>
               ))}
             </ul>
 
             {/* ROTATING REVIEW BOX */}
             <figure 
-              className={`mt-12 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur transition-opacity duration-300 min-h-[160px] flex flex-col justify-center ${
+              className={`mt-12 max-w-md rounded-3xl border border-line bg-white p-8 shadow-xl shadow-black/5 transition-opacity duration-300 min-h-[160px] flex flex-col justify-center hidden md:flex ${
                 fade ? "opacity-0" : "opacity-100"
               }`}
             >
-              <div className="flex gap-1 text-gold">
+              <div className="mb-4 flex gap-1 text-lg text-gold">
                 {[0, 1, 2, 3, 4].map((s) => (
                   <Star key={s} className="h-4 w-4" fill="currentColor" strokeWidth={0} />
                 ))}
               </div>
-              <blockquote className="mt-3 font-display text-lg leading-snug text-paper transition-all">
+              <blockquote className="font-display text-lg font-medium leading-snug text-navy transition-all">
                 “{currentReview.quote}”
               </blockquote>
-              <figcaption className="mt-4 flex items-center gap-3">
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-orange text-sm font-bold text-white">
+              <figcaption className="mt-6 flex items-center gap-4">
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-copper font-bold text-white shadow-sm">
                   {currentReview.name.charAt(0)}
                 </span>
-                <span className="font-semibold text-paper text-sm">{currentReview.name}</span>
+                <span className="font-bold text-ink">{currentReview.name}</span>
               </figcaption>
             </figure>
           </div>
 
           {/* RIGHT COLUMN: The Form / Calendar Container */}
-          <div className="reveal d1 w-full rounded-[2rem] bg-white shadow-2xl overflow-hidden relative">
+          <div className="reveal d1 w-full rounded-[2.5rem] bg-white shadow-2xl shadow-navy/5 border border-line overflow-hidden relative">
             
             {status === "success" ? (
               // Embedded GHL Calendar - Fixed Scrolling & Height
@@ -145,18 +148,19 @@ export default function BookACallPage() {
                   style={{ width: "100%", height: "800px", border: "none" }}
                   scrolling="yes"
                   id="ghl-calendar"
-                  className="w-full rounded-xl"
+                  className="w-full rounded-2xl"
                   title="Book a Call Calendar"
                 ></iframe>
               </div>
             ) : (
               // Contact Form
               <>
-                <div className="pt-8 pb-4 px-8 sm:px-10">
+                <div className="pt-8 pb-6 px-8 sm:px-10">
                   <h2 className="font-display text-2xl font-bold text-navy">Your Details</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
                   <div className="px-8 sm:px-10 pb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
                     {/* Personal Details */}
                     <div>
                       <input required className={inputClass} placeholder="First name*" value={form.firstName} onChange={set("firstName")} />
@@ -172,47 +176,47 @@ export default function BookACallPage() {
                     </div>
                     
                     {/* Investment Profile Split */}
-                    <div className="sm:col-span-2 mt-2">
-                      <span className="ml-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Investment Profile</span>
+                    <div className="sm:col-span-2 mt-4 pb-2">
+                      <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Investment Profile</span>
                     </div>
 
                     <div>
-                      <select required className={selectClass} value={form.budget} onChange={set("budget")}>
+                      <select required className={`${selectClass} ${!form.budget ? 'text-gray-400' : 'text-ink'}`} value={form.budget} onChange={set("budget")}>
                         <option value="" disabled>Approximate budget*</option>
-                        {BUDGETS.map((o) => <option key={o} value={o}>{o}</option>)}
+                        {BUDGETS.map((o) => <option key={o} value={o} className="text-ink">{o}</option>)}
                       </select>
                     </div>
                     <div>
-                      <select required className={selectClass} value={form.timeline} onChange={set("timeline")}>
+                      <select required className={`${selectClass} ${!form.timeline ? 'text-gray-400' : 'text-ink'}`} value={form.timeline} onChange={set("timeline")}>
                         <option value="" disabled>Purchase timeline*</option>
-                        {TIMELINE.map((o) => <option key={o} value={o}>{o}</option>)}
+                        {TIMELINE.map((o) => <option key={o} value={o} className="text-ink">{o}</option>)}
                       </select>
                     </div>
                     <div>
-                      <select required className={selectClass} value={form.basedIn} onChange={set("basedIn")}>
+                      <select required className={`${selectClass} ${!form.basedIn ? 'text-gray-400' : 'text-ink'}`} value={form.basedIn} onChange={set("basedIn")}>
                         <option value="" disabled>Currently based in*</option>
-                        <option value="Australia">Australia</option>
-                        <option value="Overseas">Overseas</option>
+                        <option value="Australia" className="text-ink">Australia</option>
+                        <option value="Overseas" className="text-ink">Overseas</option>
                       </select>
                     </div>
                     <div>
-                      <select required className={selectClass} value={form.investedBefore} onChange={set("investedBefore")}>
+                      <select required className={`${selectClass} ${!form.investedBefore ? 'text-gray-400' : 'text-ink'}`} value={form.investedBefore} onChange={set("investedBefore")}>
                         <option value="" disabled>Invested before?*</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No (First-time)</option>
+                        <option value="Yes" className="text-ink">Yes</option>
+                        <option value="No" className="text-ink">No</option>
                       </select>
                     </div>
                   </div>
 
                   {/* Form Footer / Submit Area */}
-                  <div className="bg-[#f8fbff] px-8 sm:px-10 py-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="text-[11px] text-muted max-w-[250px] leading-relaxed">
-                      By clicking submit, you agree to our privacy policy and terms of service.
+                  <div className="bg-[#f8fbff] px-8 sm:px-10 py-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="text-[11px] text-muted sm:max-w-[220px] leading-relaxed">
+                      By clicking submit, you agree to our <a href="/privacy-policy" className="text-ink underline hover:text-copper">privacy policy</a> and terms of service.
                     </div>
                     <button 
                       type="submit" 
                       disabled={status === "submitting"}
-                      className="w-full sm:w-auto rounded-full bg-navy hover:bg-copper transition-colors px-10 py-3.5 font-bold text-white shadow-md disabled:opacity-70 flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto rounded-full bg-navy px-10 py-4 text-sm font-bold text-white shadow-lg shadow-navy/20 transition-all hover:-translate-y-0.5 hover:bg-navy/90 hover:shadow-xl disabled:opacity-70 flex items-center justify-center gap-2"
                     >
                       {status === "submitting" ? "Sending..." : "Submit Request"}
                     </button>
@@ -221,11 +225,10 @@ export default function BookACallPage() {
               </>
             )}
           </div>
-
         </div>
       </main>
       
       <Footer />
     </>
   );
-} 
+}
