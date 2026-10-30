@@ -1,8 +1,33 @@
-import * as Icons from "lucide-react";
+import {
+  Target,
+  MapPin,
+  ShieldAlert,
+  TrendingUp,
+  Compass,
+  Handshake,
+  Landmark,
+  Gift,
+  Users,
+  Circle,
+} from "lucide-react";
 
-// Renders any lucide icon by name, e.g. <Icon name="Target" />
+// Only the icons the site uses are imported, so the whole lucide library
+// is not shipped to the browser. If you use a new icon name in site.js,
+// import it above and add it to this map, or it will show as a plain circle.
 // Browse icon names at https://lucide.dev
+const ICONS = {
+  Target,
+  MapPin,
+  ShieldAlert,
+  TrendingUp,
+  Compass,
+  Handshake,
+  Landmark,
+  Gift,
+  Users,
+};
+
 export default function Icon({ name, ...props }) {
-  const Cmp = Icons[name] || Icons.Circle;
+  const Cmp = ICONS[name] || Circle;
   return <Cmp {...props} />;
 }

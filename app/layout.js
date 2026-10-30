@@ -1,36 +1,28 @@
-import { Plus_Jakarta_Sans } from 'next/font/google';
-import Script from 'next/script';
-import './globals.css';
+import { Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
+import "./globals.css";
 
-// 1. Map to the body text variable
-const sansFont = Plus_Jakarta_Sans({ 
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'], 
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-// 2. Map the EXACT SAME font to the heading variable to completely overwrite the old serif
-const displayFont = Plus_Jakarta_Sans({ 
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'], 
-  variable: '--font-display',
-  display: 'swap',
+// One font instance only. Headings reuse it via --font-display in globals.css,
+// so the font files download once instead of twice.
+const sansFont = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata = {
-  title: 'Sunblock Property | Build Wealth in Australia',
-  description: 'Your trusted partner in Australian property investment.',
+  title: "Sunblock Property | Build Wealth in Australia",
+  description: "Your trusted partner in Australian property investment.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    // 3. Inject both variables at the HTML root so Tailwind catches them globally
-    <html lang="en" className={`${sansFont.variable} ${displayFont.variable} scroll-smooth`}>
+    <html lang="en" className={`${sansFont.variable} scroll-smooth`}>
       <body className="font-sans antialiased">
         {children}
 
-        {/* Meta Pixel Base Code (Next.js format) */}
+        {/* Meta Pixel Base Code */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
