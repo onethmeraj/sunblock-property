@@ -474,52 +474,28 @@ export default function SeminarPage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
-              <div className="reveal d1 rounded-2xl border border-line bg-panel p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-5 transition-all hover:border-orange/40 hover:shadow-md">
-                <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-2xl bg-gray-200 shadow-inner">
-                  <img 
-                    src="/tarindu.jpg" 
-                    alt="Tarindu" 
-                    className="h-full w-full object-cover object-center"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80";
-                    }}
-                  />
-                </div>
-                <div className="text-center sm:text-left flex-1">
-                  <span className="inline-block rounded-md bg-orange/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase text-orange">
-                    Property & Wealth Strategist
-                  </span>
-                  <h3 className="mt-2 font-display text-xl font-bold text-ink">
-                    Tarindu
-                  </h3>
-                  <p className="mt-1 text-xs md:text-sm text-muted leading-relaxed">
-                    Specializing in market research, cash-flow analysis, and portfolio growth strategies tailored for working professionals and expats.
-                  </p>
-                </div>
+              <div className="reveal d1 rounded-2xl border border-line bg-panel p-8 md:p-10 shadow-sm text-center transition-all hover:border-orange/40 hover:shadow-md">
+                <span className="inline-block rounded-md bg-orange/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase text-orange">
+                  Property & Wealth Strategist
+                </span>
+                <h3 className="mt-3 font-display text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+                  Tarindu
+                </h3>
+                <p className="mt-3 text-xs md:text-sm text-muted leading-relaxed max-w-sm mx-auto">
+                  Specializing in market research, cash-flow analysis, and portfolio growth strategies tailored for working professionals and expats.
+                </p>
               </div>
 
-              <div className="reveal d2 rounded-2xl border border-line bg-panel p-6 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-5 transition-all hover:border-navy/40 hover:shadow-md">
-                <div className="relative h-24 w-24 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-2xl bg-gray-200 shadow-inner">
-                  <img 
-                    src="/solicitor.jpg" 
-                    alt="Property Solicitor" 
-                    className="h-full w-full object-cover object-center"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=400&q=80";
-                    }}
-                  />
-                </div>
-                <div className="text-center sm:text-left flex-1">
-                  <span className="inline-block rounded-md bg-navy/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase text-navy">
-                    Legal & Conveyancing Expert
-                  </span>
-                  <h3 className="mt-2 font-display text-xl font-bold text-ink">
-                    Property Solicitor
-                  </h3>
-                  <p className="mt-1 text-xs md:text-sm text-muted leading-relaxed">
-                    Guiding buyers through contract reviews, off-the-plan terms, title searches, and mitigating transaction risks before settlement.
-                  </p>
-                </div>
+              <div className="reveal d2 rounded-2xl border border-line bg-panel p-8 md:p-10 shadow-sm text-center transition-all hover:border-navy/40 hover:shadow-md">
+                <span className="inline-block rounded-md bg-navy/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase text-navy">
+                  Legal & Conveyancing Expert
+                </span>
+                <h3 className="mt-3 font-display text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+                  Property Solicitor
+                </h3>
+                <p className="mt-3 text-xs md:text-sm text-muted leading-relaxed max-w-sm mx-auto">
+                  Guiding buyers through contract reviews, off-the-plan terms, title searches, and mitigating transaction risks before settlement.
+                </p>
               </div>
 
             </div>
