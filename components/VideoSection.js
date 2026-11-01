@@ -1,63 +1,55 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { Play } from "lucide-react";
 import { site } from "@/lib/site";
 
-// Turns "file.mp4" into "/file.mp4" so Next.js finds it in /public.
-function toPublicUrl(path) {
-  if (!path) return null;
-  return path.startsWith("http") || path.startsWith("/") ? path : `/${path}`;
-}
-
 export default function VideoSection() {
-  const { heading, sub, embedUrl, poster } = site.video;
+  const v = site.video || {};
+  const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
 
-  const formattedUrl = toPublicUrl(embedUrl);
-  const posterUrl = toPublicUrl(poster);
-
-  // Direct file (mp4/webm) vs YouTube/Vimeo embed
-  const isDirectVideo = formattedUrl && (formattedUrl.endsWith(".mp4") || formattedUrl.endsWith(".webm"));
+  const handlePlay = () => {
+    setPlaying(true);
+    // fire a pixel event when someone actually watches the VSL
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("trackCustom", "Played_VSL");
+    }
+    setTimeout(() => videoRef.current?.play(), 0);
+  };
 
   return (
-    <section className="relative bg-panel border-t border-line pt-10 pb-14 lg:pt-14 lg:pb-16">
-      <div className="mx-auto max-w-container px-6">
-        <div className="reveal mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-[clamp(2rem,4vw,3rem)] font-extrabold text-navy leading-[1.1] tracking-tight">
-            {heading}
+    <section className="bg-paper py-12 md:py-16">
+      <div className="mx-auto max-w-container px-6 text-center">
+        {v.heading && (
+          <h2 className="font-display text-[clamp(1.9rem,4vw,2.75rem)] font-extrabold text-navy">
+            {v.heading}
           </h2>
-          <p className="mt-6 text-muted text-lg">
-            {sub}
-          </p>
-        </div>
+        )}
+        {v.sub && <p className="mt-3 text-base md:text-lg text-muted">{v.sub}</p>}
 
-        <div className="reveal d1 mx-auto mt-14 max-w-4xl overflow-hidden rounded-[2rem] bg-panel shadow-2xl ring-1 ring-black/5">
-          <div className="relative aspect-video w-full bg-navy/5 flex items-center justify-center">
-            {formattedUrl ? (
-              isDirectVideo ? (
-                /* preload="none": the video only downloads when someone presses play */
-                <video
-                  controls
-                  playsInline
-                  preload="none"
-                  poster={posterUrl || undefined}
-                  className="absolute inset-0 h-full w-full bg-black outline-none"
-                >
-                  <source src={formattedUrl} type={formattedUrl.endsWith(".webm") ? "video/webm" : "video/mp4"} />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <iframe
-                  src={formattedUrl}
-                  title="Property Investment Video"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 h-full w-full border-0 outline-none"
-                ></iframe>
-              )
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-navy/40 font-medium">
-                Add your video embed URL in site.js
-              </div>
-            )}
-          </div>
+        <div className="relative mt-8 mx-auto max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-xl bg-black">
+          <video
+            ref={videoRef}
+            src={v.embedUrl}
+            poster={v.poster || undefined}
+            controls={playing}
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-cover"
+          />
+
+          {!playing && (
+            <button
+              onClick={handlePlay}
+              aria-label="Play video"
+              className="absolute inset-0 flex items-center justify-center bg-black/30 transition hover:bg-black/40"
+            >
+              <span className="grid h-20 w-20 place-items-center rounded-full bg-orange text-white shadow-lg transition-transform hover:scale-110">
+                <Play className="h-8 w-8 translate-x-0.5" fill="currentColor" />
+              </span>
+            </button>
+          )}
         </div>
       </div>
     </section>

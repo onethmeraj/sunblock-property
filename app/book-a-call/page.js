@@ -60,7 +60,12 @@ export default function BookACallPage() {
       } else {
         await new Promise((r) => setTimeout(r, 800)); 
       }
-      
+
+      // Fire the Meta Pixel Lead event (general page now tracked like the seminar page)
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead');
+      }
+
       setStatus("success");
     } catch {
       setStatus("error");
@@ -87,12 +92,6 @@ export default function BookACallPage() {
               Get in touch
             </span>
             
-            {/* 
-              FIX: 
-              1. leading-[1.25] prevents the 'y' from overlapping line 2.
-              2. text-[1.75rem] on mobile wraps properly so it never cuts off to "strategy ca".
-              3. break-words ensures no layout overflow.
-            */}
             <h1 className="mt-2.5 sm:mt-3 font-display text-[1.75rem] xs:text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-navy leading-[1.25] sm:leading-[1.22] tracking-tight break-words">
               Schedule your strategy call
             </h1>
