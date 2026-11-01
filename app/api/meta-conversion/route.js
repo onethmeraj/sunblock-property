@@ -13,48 +13,68 @@ function hashPhone(data) {
 }
 
 // ============================================================
-//  THE ROUTER — one endpoint handles every funnel event.
-//  Left  = the tag or Pipeline 1 stage name coming from GHL.
-//  Right = the Meta event it becomes.
-//  Add a new stage later = add ONE line here. Never touch GHL.
+//  THE ROUTER — tag/stage name  ->  Meta event
 // ============================================================
 const EVENT_MAP = {
-  // website form tags
   form_filled: 'Lead',
   'seminar-registered': 'CompleteRegistration',
   call_booked: 'Schedule',
-
-  // Pipeline 1 opportunity stages (exact GHL names)
-  'Form Filled': 'Lead',
-  'Booked Call': 'Schedule',
-  'Call Attended': 'Contact',
-  'No Show': 'NoShow',
-  'Follow-Up': 'CustomEvent_FollowUp',
-  'Closed Won': 'Purchase',
-  // 'Closed Lost' is intentionally left out — don't send lost deals to Meta
+  call_attended: 'Contact',
+  call_no_show: 'NoShow',
+  // follow_up / client_onboarding / lead_no_booking: skip unless you want them
 };
+
+// Pull every possible place GHL might put tag(s) / an event key, flatten to one array
+function collectKeys(body) {
+  const out = [];
+  const push = (v) => {
+    if (!v) return;
+    if (Array.isArray(v)) v.forEach((x) => out.push(String(x).trim()));
+    else String(v).split(',').forEach((x) => out.push(x.trim())); // GHL often sends "tag1, tag2"
+  };
+
+  // explicit custom-data keys (if ever set)
+  push(body.event_key);
+  push(body.stage);
+  push(body.tag);
+  // GHL standard tag fields (names vary by account)
+  push(body.tags);
+  push(body.contact_tags);
+  push(body['contact.tags']);
+  push(body.contact?.tags);
+  push(body.customData?.event_key);
+  push(body.customData?.tags);
+
+  return out.filter(Boolean);
+}
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email, phone, first_name, last_name } = body;
 
-    // which event is this? (sent from the GHL relay webhook as event_key)
-    const key = body.event_key || body.stage || body.tag;
-    const event_name = EVENT_MAP[key];
+    // keep this while debugging — shows the exact GHL payload in Vercel logs
+    console.log('GHL PAYLOAD:', JSON.stringify(body));
 
-    // not a tracked event -> acknowledge so GHL doesn't retry, and stop
+    // find the FIRST key that we actually map to a Meta event
+    const keys = collectKeys(body);
+    const matchedKey = keys.find((k) => EVENT_MAP[k]);
+    const event_name = matchedKey ? EVENT_MAP[matchedKey] : undefined;
+
     if (!event_name) {
-      return NextResponse.json({ success: true, skipped: key || 'no key' });
+      // nothing we track -> acknowledge so GHL doesn't retry
+      return NextResponse.json({ success: true, skipped: keys.join(',') || 'no key' });
     }
 
-    const PIXEL_ID = process.env.META_PIXEL_ID;        // 1425738326388331
-    const ACCESS_TOKEN = process.env.META_CAPI_TOKEN;  // token lives in env var only
+    // contact fields — check the common GHL shapes
+    const email = body.email || body.contact?.email;
+    const phone = body.phone || body.contact?.phone;
+    const first_name = body.first_name || body.firstName || body.contact?.first_name;
+    const last_name = body.last_name || body.lastName || body.contact?.last_name;
 
+    const PIXEL_ID = process.env.META_PIXEL_ID;
+    const ACCESS_TOKEN = process.env.META_CAPI_TOKEN;
     const url = `https://graph.facebook.com/v20.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
 
-    // dedup id so browser pixel + this server event count as ONE in Meta.
-    // For Lead / CompleteRegistration, pass the browser's id as browser_event_id.
     const day = new Date().toISOString().slice(0, 10);
     const event_id = body.browser_event_id || `${event_name}_${email || phone || 'anon'}_${day}`;
 
@@ -75,11 +95,10 @@ export async function POST(request) {
           },
           custom_data: {
             lead_source: 'GoHighLevel CRM',
-            stage: key,
+            stage: matchedKey,
           },
         },
       ],
-      // keep this while testing in Test Events; remove (unset env var) for live
       ...(process.env.META_TEST_EVENT_CODE
         ? { test_event_code: process.env.META_TEST_EVENT_CODE }
         : {}),
@@ -92,13 +111,13 @@ export async function POST(request) {
     });
 
     const result = await response.json();
-    return NextResponse.json({ success: response.ok, event: event_name, result });
+    console.log('META RESPONSE:', JSON.stringify(result));
+    return NextResponse.json({ success: response.ok, event: event_name, matched: matchedKey, result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// quick browser health check: visit /api/meta-conversion
 export async function GET() {
   return NextResponse.json({
     ok: true,
