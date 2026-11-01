@@ -13,12 +13,10 @@ function hashPhone(data) {
 }
 
 // ============================================================
-//  THE ROUTER — one endpoint handles every funnel stage.
-//  Left  = the tag or Pipeline 1 STAGE NAME coming from GHL.
+//  THE ROUTER — one endpoint handles every funnel event.
+//  Left  = the tag or Pipeline 1 stage name coming from GHL.
 //  Right = the Meta event it becomes.
 //  Add a new stage later = add ONE line here. Never touch GHL.
-//  >>> Replace the stage names on the left with your EXACT
-//      Pipeline 1 stage names from GHL -> Opportunities. <<<
 // ============================================================
 const EVENT_MAP = {
   // website form tags
@@ -26,12 +24,14 @@ const EVENT_MAP = {
   'seminar-registered': 'CompleteRegistration',
   call_booked: 'Schedule',
 
-  // Pipeline 1 opportunity stages (confirm exact names)
-  'Call Booked': 'Schedule',
+  // Pipeline 1 opportunity stages (exact GHL names)
+  'Form Filled': 'Lead',
+  'Booked Call': 'Schedule',
   'Call Attended': 'Contact',
   'No Show': 'NoShow',
-  Won: 'Purchase',
-  // Lost: leave out if you don't want it sent to Meta
+  'Follow-Up': 'CustomEvent_FollowUp',
+  'Closed Won': 'Purchase',
+  // 'Closed Lost' is intentionally left out — don't send lost deals to Meta
 };
 
 export async function POST(request) {
@@ -49,7 +49,7 @@ export async function POST(request) {
     }
 
     const PIXEL_ID = process.env.META_PIXEL_ID;        // 1425738326388331
-    const ACCESS_TOKEN = process.env.META_CAPI_TOKEN;  // <-- NEW token, env var only
+    const ACCESS_TOKEN = process.env.META_CAPI_TOKEN;  // token lives in env var only
 
     const url = `https://graph.facebook.com/v20.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
 
@@ -79,7 +79,7 @@ export async function POST(request) {
           },
         },
       ],
-      // keep this while testing in Test Events; remove (unset the env var) for live
+      // keep this while testing in Test Events; remove (unset env var) for live
       ...(process.env.META_TEST_EVENT_CODE
         ? { test_event_code: process.env.META_TEST_EVENT_CODE }
         : {}),
