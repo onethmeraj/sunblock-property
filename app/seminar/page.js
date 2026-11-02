@@ -473,27 +473,41 @@ export default function SeminarPage() {
               </p>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
-              <div className="reveal d1 rounded-2xl border border-line bg-panel p-8 md:p-10 shadow-sm text-center transition-all hover:border-orange/40 hover:shadow-md">
-                <span className="inline-block rounded-md bg-orange/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase text-orange">
+            {/* SPEAKER CARDS — compact, both aligned (Tarindu gets an initial circle so names line up) */}
+            <div className="grid gap-5 sm:grid-cols-2 max-w-3xl mx-auto">
+
+              {/* LEFT — Tarindu (initial circle, no photo) */}
+              <div className="reveal d1 rounded-2xl border border-line bg-panel p-6 shadow-sm text-center transition-all hover:border-orange/40 hover:shadow-md">
+                <div className="mx-auto mb-4 grid h-24 w-24 place-items-center rounded-full bg-orange/10 text-orange shadow-inner ring-4 ring-white">
+                  <span className="font-display text-4xl font-extrabold">T</span>
+                </div>
+                <span className="inline-block rounded-md bg-orange/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide uppercase text-orange">
                   Property & Wealth Strategist
                 </span>
-                <h3 className="mt-3 font-display text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+                <h3 className="mt-2 font-display text-2xl md:text-3xl font-extrabold text-ink leading-tight">
                   Tarindu
                 </h3>
-                <p className="mt-3 text-xs md:text-sm text-muted leading-relaxed max-w-sm mx-auto">
-                  Specializing in market research, cash-flow analysis, and portfolio growth strategies tailored for working professionals and expats.
+                <p className="mt-2 text-xs md:text-sm text-muted leading-relaxed max-w-xs mx-auto">
+                  Specializing in market research, cash-flow analysis, and portfolio growth strategies for working professionals and expats.
                 </p>
               </div>
 
-              <div className="reveal d2 rounded-2xl border border-line bg-panel p-8 md:p-10 shadow-sm text-center transition-all hover:border-navy/40 hover:shadow-md">
-                <span className="inline-block rounded-md bg-navy/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wide uppercase text-navy">
+              {/* RIGHT — Solicitor (photo) */}
+              <div className="reveal d2 rounded-2xl border border-line bg-panel p-6 shadow-sm text-center transition-all hover:border-navy/40 hover:shadow-md">
+                <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-gray-200 shadow-md ring-4 ring-white">
+                  <img
+                    src="/solicitor.jpg"
+                    alt="Property Solicitor"
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+                <span className="inline-block rounded-md bg-navy/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide uppercase text-navy">
                   Legal & Conveyancing Expert
                 </span>
-                <h3 className="mt-3 font-display text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+                <h3 className="mt-2 font-display text-2xl md:text-3xl font-extrabold text-ink leading-tight">
                   Property Solicitor
                 </h3>
-                <p className="mt-3 text-xs md:text-sm text-muted leading-relaxed max-w-sm mx-auto">
+                <p className="mt-2 text-xs md:text-sm text-muted leading-relaxed max-w-xs mx-auto">
                   Guiding buyers through contract reviews, off-the-plan terms, title searches, and mitigating transaction risks before settlement.
                 </p>
               </div>
