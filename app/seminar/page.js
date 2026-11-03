@@ -11,11 +11,12 @@ import { site } from "@/lib/site";
 const BUDGETS = ["Under $500k", "$500k – $750k", "$750k – $1M", "$1M – $1.5M", "$1.5M+", "Not sure yet"];
 const TIMELINE = ["Within 3 months", "3 to 6 months", "6 to 12 months", "Just researching"];
 
+// Property-investment focused FAQs (reframed away from finance-service language)
 const FAQS = [
-  { q: "Is this really free?", a: "Yes, 100% free with no sales pressure. Our goal is to educate and empower you." },
-  { q: "Will this be recorded?", a: "To encourage open Q&A and protect the exclusivity of the data shared, we do not distribute recordings." },
-  { q: "I am between contracts right now, should I attend?", a: "Absolutely. Planning your strategy before you are ready to buy is the best way to ensure you can act fast when the time comes." },
-  { q: "Why use a buyer's agent?", a: "We level the playing field. We give you access to off-market properties, negotiate on your behalf, and remove the emotion and guesswork from investing." }
+  { q: "Is this really free?", a: "Yes, 100% free with no sales pressure. Our goal is to educate you on smart property investing." },
+  { q: "Will this be recorded?", a: "To encourage open Q&A and protect the exclusivity of the property data shared, we do not distribute recordings." },
+  { q: "I am still researching, should I attend?", a: "Absolutely. Planning your property strategy before you are ready to buy is the best way to act fast when the right investment comes up." },
+  { q: "Why use a buyer's agent?", a: "We level the playing field. We give you access to off-market properties, represent you in negotiations, and remove the emotion and guesswork from choosing an investment." }
 ];
 
 export default function SeminarPage() {
@@ -239,11 +240,11 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* The rest of the sections (Stats, Comparison, Agenda, Case Studies, etc.) remain untouched... */}
+        {/* STATS */}
         <section className="bg-panel py-10 md:py-12 border-y border-line relative z-10">
           <div className="mx-auto max-w-container px-6 text-center reveal">
             <h2 className="text-2xl md:text-3xl font-extrabold text-navy mb-8">
-              A more supported way to invest
+              A more supported way to invest in property
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-line/60">
               <div className="flex flex-col items-center justify-center pt-6 md:pt-0 reveal d1">
@@ -262,6 +263,7 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* COMPARISON */}
         <section className="bg-white py-12 md:py-16">
           <div className="mx-auto max-w-container px-6">
             <div className="reveal text-center max-w-3xl mx-auto mb-10 md:mb-14">
@@ -270,7 +272,7 @@ export default function SeminarPage() {
                 <span className="text-orange">Investing with certainty.</span>
               </h2>
               <p className="mt-3 text-base md:text-lg text-muted">
-                See the difference between scrolling through unfamiliar listings and using a data-driven system to secure your property.
+                See the difference between scrolling through unfamiliar listings and using a data-driven system to secure the right investment property.
               </p>
             </div>
             
@@ -280,19 +282,19 @@ export default function SeminarPage() {
               </div>
               
               <div className="reveal d1 rounded-2xl border border-line bg-gray-50 p-6 md:p-8 h-full">
-                <h3 className="text-xl font-bold text-navy mb-5 text-center md:text-left">Investing Without A System</h3>
+                <h3 className="text-xl font-bold text-navy mb-5 text-center md:text-left">Buying Without A System</h3>
                 <ul className="space-y-3.5">
                   <li className="flex gap-3.5 items-start text-muted text-sm md:text-base">
                     <X className="h-5 w-5 shrink-0 text-gray-400 mt-0.5"/> 
-                    <span className="leading-relaxed">Overwhelmed by hundreds of listings and unfamiliar markets.</span>
+                    <span className="leading-relaxed">Overwhelmed by hundreds of listings and unfamiliar suburbs.</span>
                   </li>
                   <li className="flex gap-3.5 items-start text-muted text-sm md:text-base">
                     <X className="h-5 w-5 shrink-0 text-gray-400 mt-0.5"/> 
-                    <span className="leading-relaxed">Fear of making a $500K+ mistake due to lack of local insight.</span>
+                    <span className="leading-relaxed">Worried about buying the wrong property due to a lack of local market insight.</span>
                   </li>
                   <li className="flex gap-3.5 items-start text-muted text-sm md:text-base">
                     <X className="h-5 w-5 shrink-0 text-gray-400 mt-0.5"/> 
-                    <span className="leading-relaxed">Relying on real estate agents who work exclusively for the seller.</span>
+                    <span className="leading-relaxed">Relying on selling agents who work exclusively for the vendor.</span>
                   </li>
                 </ul>
               </div>
@@ -300,16 +302,16 @@ export default function SeminarPage() {
               <div className="reveal d2 rounded-2xl bg-navy text-white p-6 md:p-8 shadow-xl transform md:scale-105 h-full relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-orange/10 rounded-bl-full blur-2xl"></div>
                 <h3 className="text-xl font-bold mb-5 text-center md:text-left relative z-10">
-                  Investing With <span className="text-orange">Sunblock</span>
+                  Buying With <span className="text-orange">Sunblock</span>
                 </h3>
                 <ul className="space-y-3.5 relative z-10">
                   <li className="flex gap-3.5 items-start text-paper/90 text-sm md:text-base">
                     <Check className="h-5 w-5 shrink-0 text-orange mt-0.5"/> 
-                    <span className="leading-relaxed font-medium">Data-driven shortlist removing the guesswork and emotion.</span>
+                    <span className="leading-relaxed font-medium">A data-driven property shortlist that removes the guesswork and emotion.</span>
                   </li>
                   <li className="flex gap-3.5 items-start text-paper/90 text-sm md:text-base">
                     <Check className="h-5 w-5 shrink-0 text-orange mt-0.5"/> 
-                    <span className="leading-relaxed font-medium">Built-in risk management and cash buffer planning.</span>
+                    <span className="leading-relaxed font-medium">Thorough due diligence and risk checks on every property.</span>
                   </li>
                   <li className="flex gap-3.5 items-start text-paper/90 text-sm md:text-base">
                     <Check className="h-5 w-5 shrink-0 text-orange mt-0.5"/> 
@@ -321,12 +323,13 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* SYLLABUS / AGENDA */}
         <section className="bg-panel border-t border-line">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16">
             <div className="reveal max-w-2xl">
               <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1 text-xs font-semibold text-navy shadow-sm">
                 <span className="flex h-2 w-2 rounded-full bg-copper"></span>
-                SYLLABUS
+                WHAT WE COVER
               </div>
               <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
                 What You’ll Learn
@@ -353,6 +356,7 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* CASE STUDIES */}
         <section className="bg-white">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16 border-t border-line">
             <div className="reveal mb-8">
@@ -364,7 +368,7 @@ export default function SeminarPage() {
                 Real Client Results
               </h2>
               <p className="mt-3 text-base text-muted max-w-2xl leading-relaxed lg:text-lg">
-                See how we help time-poor professionals bypass the noise, secure off-market properties, and build data-driven wealth.
+                See how we help time-poor professionals bypass the noise, secure off-market properties, and build data-driven property portfolios.
               </p>
             </div>
 
@@ -378,9 +382,9 @@ export default function SeminarPage() {
                   </span>
                   <h3 className="text-2xl md:text-3xl font-extrabold mb-3">First Home to Portfolio</h3>
                   <p className="text-paper/80 text-sm md:text-base leading-relaxed mb-5 max-w-md">
-                    We restructured Chrisal and Dani's finances so they could buy their first home in just four months. Two years later, after their property value increased by 30%, we helped them use that equity to secure a positively geared investment property despite rising interest rates.
+                    We guided Chrisal and Dani through buying their first home in just four months. Two years later, after their property value increased by 30%, we helped them secure a second investment property that pays for itself.
                   </p>
-                  <p className="font-bold text-orange text-base md:text-lg">Positively geared investment</p>
+                  <p className="font-bold text-orange text-base md:text-lg">Second investment secured</p>
                 </div>
                 <div className="relative z-10 mt-8 border-t border-white/10 pt-5">
                   <span className="text-xs font-bold text-white/50 tracking-widest uppercase mb-1 block">Client Result</span>
@@ -394,11 +398,11 @@ export default function SeminarPage() {
                   <div>
                     <h3 className="text-lg md:text-xl font-bold text-navy mb-2">Healthcare Professionals</h3>
                     <p className="text-muted text-xs md:text-sm leading-relaxed mb-4">
-                      After helping Gian and Kaye consolidate debt, we used a data-driven strategy to secure them a brand-new property in a growing suburb with instant equity.
+                      We used a data-driven strategy to secure Gian and Kaye a brand-new property in a growing suburb that was tenanted almost immediately.
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Instant Equity</p>
+                    <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Strong Demand</p>
                     <div className="inline-block bg-orange text-white text-xs md:text-sm font-bold px-4 py-2 rounded-xl shadow-md shadow-orange/20">
                       TENANTED IN 1 WEEK
                     </div>
@@ -409,14 +413,14 @@ export default function SeminarPage() {
                   <div>
                     <h3 className="text-lg md:text-xl font-bold text-navy mb-2">Single Mum Investor</h3>
                     <p className="text-muted text-xs md:text-sm leading-relaxed mb-4">
-                      Uma originally wanted to upgrade her home, but shifted to a strategy of purchasing 3-4 positively geared properties to achieve financial freedom and more time with her son.
+                      Uma originally wanted to upgrade her home, but shifted to a strategy of purchasing 3-4 investment properties to build long-term security and more time with her son.
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Positively Geared</p>
+                    <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Self-Supporting</p>
                     <div className="border-l-4 border-orange pl-4">
                       <div className="text-lg md:text-xl font-extrabold text-navy">TENANTED AT 1ST OPEN</div>
-                      <div className="text-xs font-bold text-muted uppercase tracking-wider mt-0.5">Immediate Income</div>
+                      <div className="text-xs font-bold text-muted uppercase tracking-wider mt-0.5">Immediate Rental Demand</div>
                     </div>
                   </div>
                 </div>
@@ -426,6 +430,7 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* MEET KAUSHI */}
         <section className="bg-panel overflow-hidden border-t border-line">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16">
             <div className="grid gap-8 md:grid-cols-2 items-center">
@@ -457,65 +462,73 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* GUEST SPEAKER — single, full-width card (photo left, details right) */}
         <section className="bg-white border-t border-line py-12 md:py-16">
           <div className="mx-auto max-w-container px-6">
             
             <div className="reveal max-w-2xl mx-auto text-center mb-10">
               <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-1 text-xs font-semibold text-navy shadow-sm">
                 <span className="flex h-2 w-2 rounded-full bg-copper"></span>
-                EVENT SPEAKERS
+                GUEST SPEAKER
               </div>
               <h2 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.15] text-ink">
-                Learn From The Experts
+                Learn From The Expert
               </h2>
               <p className="mt-2.5 text-sm md:text-base text-muted leading-relaxed">
-                Get practical property strategies and critical legal insights directly from industry professionals actively securing high-performing assets.
+                Get practical property insights directly from an industry professional who helps buyers secure the right investment with confidence.
               </p>
             </div>
 
-            {/* SPEAKER CARDS — compact, both aligned (Tarindu gets an initial circle so names line up) */}
-            <div className="grid gap-5 sm:grid-cols-2 max-w-3xl mx-auto">
+            <div className="reveal max-w-4xl mx-auto overflow-hidden rounded-3xl border border-line bg-panel shadow-sm">
+              <div className="grid md:grid-cols-[0.8fr_1.2fr] items-stretch">
 
-              {/* LEFT — Tarindu (initial circle, no photo) */}
-              <div className="reveal d1 rounded-2xl border border-line bg-panel p-6 shadow-sm text-center transition-all hover:border-orange/40 hover:shadow-md">
-                <div className="mx-auto mb-4 grid h-24 w-24 place-items-center rounded-full bg-orange/10 text-orange shadow-inner ring-4 ring-white">
-                  <span className="font-display text-4xl font-extrabold">T</span>
-                </div>
-                <span className="inline-block rounded-md bg-orange/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide uppercase text-orange">
-                  Property & Wealth Strategist
-                </span>
-                <h3 className="mt-2 font-display text-2xl md:text-3xl font-extrabold text-ink leading-tight">
-                  Tarindu
-                </h3>
-                <p className="mt-2 text-xs md:text-sm text-muted leading-relaxed max-w-xs mx-auto">
-                  Specializing in market research, cash-flow analysis, and portfolio growth strategies for working professionals and expats.
-                </p>
-              </div>
-
-              {/* RIGHT — Solicitor (photo) */}
-              <div className="reveal d2 rounded-2xl border border-line bg-panel p-6 shadow-sm text-center transition-all hover:border-navy/40 hover:shadow-md">
-                <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-gray-200 shadow-md ring-4 ring-white">
+                {/* Photo */}
+                <div className="relative h-72 w-full md:h-full bg-gray-200">
                   <img
                     src="/solicitor.jpg"
                     alt="Property Solicitor"
-                    className="h-full w-full object-cover object-center"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
                   />
                 </div>
-                <span className="inline-block rounded-md bg-navy/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wide uppercase text-navy">
-                  Legal & Conveyancing Expert
-                </span>
-                <h3 className="mt-2 font-display text-2xl md:text-3xl font-extrabold text-ink leading-tight">
-                  Property Solicitor
-                </h3>
-                <p className="mt-2 text-xs md:text-sm text-muted leading-relaxed max-w-xs mx-auto">
-                  Guiding buyers through contract reviews, off-the-plan terms, title searches, and mitigating transaction risks before settlement.
-                </p>
-              </div>
 
+                {/* Details */}
+                <div className="p-8 md:p-10 flex flex-col justify-center text-center md:text-left">
+                  <span className="inline-block self-center md:self-start rounded-md bg-navy/10 px-3 py-1 text-[11px] font-bold tracking-wide uppercase text-navy">
+                    Property &amp; Conveyancing Expert
+                  </span>
+                  <h3 className="mt-4 font-display text-3xl md:text-4xl font-extrabold text-ink leading-tight">
+                    Property Solicitor
+                  </h3>
+                  <p className="mt-4 text-sm md:text-base text-muted leading-relaxed">
+                    Guiding buyers through contract reviews, off-the-plan terms, title searches, and the key checks that protect a property purchase. You will learn exactly what to look for before you sign, and the common traps that catch first-time investors.
+                  </p>
+
+                  <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                    <li className="flex items-start gap-2.5 text-sm text-ink">
+                      <Check className="h-4 w-4 shrink-0 text-orange mt-0.5" strokeWidth={3} />
+                      <span>Contract reviews &amp; red flags</span>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-sm text-ink">
+                      <Check className="h-4 w-4 shrink-0 text-orange mt-0.5" strokeWidth={3} />
+                      <span>Off-the-plan terms explained</span>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-sm text-ink">
+                      <Check className="h-4 w-4 shrink-0 text-orange mt-0.5" strokeWidth={3} />
+                      <span>Title searches &amp; due diligence</span>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-sm text-ink">
+                      <Check className="h-4 w-4 shrink-0 text-orange mt-0.5" strokeWidth={3} />
+                      <span>Protecting your property purchase</span>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
             </div>
           </div>
         </section>
 
+        {/* FAQ */}
         <section className="bg-panel border-t border-line">
           <div className="mx-auto max-w-container px-6 py-12 md:py-16">
             <div className="reveal max-w-2xl mb-8">
@@ -546,6 +559,7 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* FINAL CTA */}
         <section className="bg-white px-6 py-12 md:py-16">
           <div className="mx-auto max-w-container">
             <div className="reveal flex flex-col md:flex-row items-center justify-between gap-8 rounded-[2rem] bg-navy p-8 md:p-12 shadow-2xl relative overflow-hidden">
@@ -560,7 +574,7 @@ export default function SeminarPage() {
                   Ready To Buy <br/> <span className="text-orange">With Confidence?</span>
                 </h2>
                 <p className="mt-3.5 text-white/90 text-base">
-                  Stop guessing. Start investing with a proven, data-driven system built specifically for expats and first-time buyers.
+                  Stop guessing. Start investing with a proven, data-driven property system built specifically for expats and first-time buyers.
                 </p>
               </div>
 

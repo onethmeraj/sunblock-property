@@ -47,7 +47,7 @@ export default function Hero() {
               {src ? (
                 <Image
                   src={src}
-                  alt="Property Investment"
+                  alt="Australian property"
                   fill
                   priority
                   sizes="(min-width: 1024px) 45vw, 100vw"
