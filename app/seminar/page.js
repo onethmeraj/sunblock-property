@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Clock, MapPin, Check, X, Tag, ChevronDown, ArrowRight, ShieldCheck } from "lucide-react";
+import { Calendar, Clock, MapPin, Check, X, Tag, ChevronDown, ChevronLeft, ChevronRight, ArrowRight, ShieldCheck, Quote } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -91,6 +91,18 @@ function Choice({ label, value, options, onPick }) {
 
 export default function SeminarPage() {
   const s = site.seminarPage || { offers: [], agenda: [] };
+  const host = s.host || { name: "Kaushi", titles: [], bio: "", image: "kaushi.jpg" };
+  const experts = s.speakers || [];
+  const past = s.pastEvent || {};
+  const photos = past.photos || [];
+  const realReviews = past.reviews || [];
+  // While no real reviews are added, show 4 empty slots on localhost only
+  // so you can see the layout. These never appear on the live site.
+  const previewSlots = process.env.NODE_ENV !== "production" && realReviews.length === 0;
+  const reviews = previewSlots
+    ? Array.from({ length: 4 }, () => ({ quote: "Review slot. Add a real attendee review in lib/site.js under pastEvent.reviews.", name: "Attendee name", detail: "Seminar attendee", preview: true }))
+    : realReviews;
+  const [lightbox, setLightbox] = useState(null);
 
   const [form, setForm] = useState({
     firstName: "", lastName: "", phone: "", email: "",
@@ -125,6 +137,17 @@ export default function SeminarPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowRight") setLightbox((i) => (i + 1) % photos.length);
+      if (e.key === "ArrowLeft") setLightbox((i) => (i - 1 + photos.length) % photos.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox, photos.length]);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
   const pick = (k) => (v) => {
@@ -369,6 +392,72 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* PAST SEMINAR GALLERY: slow moving photo strip */}
+        {photos.length > 0 && (
+          <section className="overflow-hidden border-b border-line bg-paper py-14 md:py-20">
+            <div className="reveal mx-auto mb-10 flex max-w-container flex-col gap-6 px-6 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-2xl">
+                <Eyebrow>{past.eyebrow || "Our last seminar"}</Eyebrow>
+                <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
+                  {past.heading || "See what happened last time"}
+                </h2>
+                {past.sub && <p className="mt-3 text-base leading-relaxed text-muted lg:text-lg">{past.sub}</p>}
+              </div>
+              {past.highlights?.length > 0 && (
+                <div className="flex shrink-0 gap-3">
+                  {past.highlights.map((h) => (
+                    <div key={h.label} className="rounded-2xl border border-line bg-white px-5 py-3 text-center shadow-sm">
+                      <div className="font-display text-2xl font-extrabold text-orange">{h.value}</div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-muted">{h.label}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              {/* soft fade on both edges */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-paper to-transparent sm:w-24" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-paper to-transparent sm:w-24" />
+
+              <div
+                className="gallery-track flex w-max gap-4 hover:[animation-play-state:paused]"
+                style={{ "--gallery-duration": `${photos.length * 9}s` }}
+              >
+                {[...photos, ...photos].map((p, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setLightbox(i % photos.length)}
+                    aria-hidden={i >= photos.length ? true : undefined}
+                    tabIndex={i >= photos.length ? -1 : 0}
+                    aria-label={`Open photo: ${p.alt || "seminar photo"}`}
+                    className="group relative h-56 w-[300px] shrink-0 overflow-hidden rounded-2xl bg-gray-200 shadow-sm sm:h-72 sm:w-[420px]"
+                  >
+                    <img
+                      src={`/${p.src}`}
+                      alt={i >= photos.length ? "" : p.alt || "Seminar photo"}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    {p.caption && (
+                      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-left text-sm font-semibold text-white">
+                        {p.caption}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <p className="mt-5 text-center text-xs text-muted">Tap any photo to view it full size</p>
+
+            <style dangerouslySetInnerHTML={{ __html: `
+              @keyframes gallery-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+              .gallery-track { animation: gallery-scroll var(--gallery-duration, 60s) linear infinite; }
+            ` }} />
+          </section>
+        )}
+
         {/* COMPARISON */}
         <section className="bg-white py-14 md:py-20">
           <div className="mx-auto max-w-container px-6">
@@ -459,6 +548,143 @@ export default function SeminarPage() {
           </div>
         </section>
 
+        {/* MEET KAUSHI */}
+        <section className="border-t border-line bg-panel overflow-hidden">
+          <div className="mx-auto max-w-container px-6 py-14 md:py-20">
+            <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+              <div className="reveal relative">
+                <div className="photo relative aspect-[4/5] w-full overflow-hidden rounded-[1.75rem] bg-gray-100 shadow-xl">
+                  <img src={`/${host.image}`} alt={host.name} className="absolute inset-0 h-full w-full object-cover object-top" />
+                </div>
+                <div className="absolute -bottom-5 left-5 right-5 rounded-2xl border border-line bg-white px-5 py-4 shadow-lg sm:left-8 sm:right-auto">
+                  <div className="font-display text-lg font-extrabold text-navy">{host.name}</div>
+                  <div className="text-xs font-semibold text-muted">Founder, {site.brandName}</div>
+                </div>
+              </div>
+
+              <div className="reveal d1 pt-6 md:pt-0">
+                <Eyebrow>Meet your host</Eyebrow>
+                <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
+                  Meet {host.name}
+                </h2>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {host.titles.map((t) => (
+                    <span key={t} className="rounded-full bg-orange/10 px-3.5 py-1.5 text-xs font-bold text-orange">{t}</span>
+                  ))}
+                </div>
+                <p className="mt-5 text-base leading-relaxed text-muted lg:text-lg">{host.bio}</p>
+                {host.points?.length > 0 && (
+                  <ul className="mt-6 space-y-3">
+                    {host.points.map((p) => (
+                      <li key={p} className="flex items-start gap-3 text-sm text-ink md:text-base">
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-orange" strokeWidth={2.5} />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* LEARN FROM THE EXPERTS */}
+        {experts.length > 0 && (
+          <section className="border-t border-line bg-white">
+            <div className="mx-auto max-w-container px-6 py-14 md:py-20">
+              <div className="reveal mx-auto mb-10 max-w-2xl text-center">
+                <Eyebrow>Guest speakers</Eyebrow>
+                <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
+                  Learn from the experts
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-muted">
+                  Hear directly from the professionals who guide buyers through finance and legal checks.
+                </p>
+              </div>
+
+              <div className={`grid gap-6 ${experts.length > 1 ? "md:grid-cols-2" : "mx-auto max-w-xl"}`}>
+                {experts.map((sp, i) => (
+                  <article key={sp.name} className={`reveal d${(i % 3) + 1} flex flex-col overflow-hidden rounded-3xl border border-line bg-panel shadow-sm sm:flex-row`}>
+                    <div className="photo relative aspect-[4/3] w-full shrink-0 bg-gray-200 sm:aspect-auto sm:w-[42%]">
+                      {sp.image ? (
+                        <img src={`/${sp.image}`} alt={sp.name} className="absolute inset-0 h-full w-full object-cover object-top" />
+                      ) : (
+                        <span className="tag">Photo coming soon</span>
+                      )}
+                    </div>
+                    <div className="flex flex-1 flex-col p-6 md:p-7">
+                      <span className="self-start rounded-md bg-navy/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-navy">
+                        {sp.role}
+                      </span>
+                      <h3 className="mt-3 font-display text-2xl font-extrabold text-ink">{sp.name}</h3>
+                      <p className="mt-2.5 text-sm leading-relaxed text-muted">{sp.bio}</p>
+                      {sp.topics?.length > 0 && (
+                        <ul className="mt-4 space-y-2">
+                          {sp.topics.map((t) => (
+                            <li key={t} className="flex items-start gap-2 text-sm text-ink">
+                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-orange" strokeWidth={3} />
+                              <span>{t}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ATTENDEE REVIEWS (shows once real reviews are added in site.js) */}
+        {reviews.length > 0 && (
+          <section className="border-t border-line bg-panel">
+            <div className="mx-auto max-w-container px-6 py-14 md:py-20">
+              <div className="reveal mx-auto mb-10 max-w-2xl text-center">
+                <Eyebrow>Attendee feedback</Eyebrow>
+                <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
+                  What attendees said
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-muted">
+                  Real words from people who joined us at our last seminar.
+                </p>
+              </div>
+
+              <div className={`grid gap-5 sm:grid-cols-2 ${reviews.length >= 3 ? "lg:grid-cols-3" : ""} ${reviews.length === 4 ? "lg:grid-cols-4" : ""}`}>
+                {reviews.map((r, i) => (
+                  <figure key={i} className={`reveal d${(i % 3) + 1} card-hover flex flex-col rounded-2xl border bg-white p-6 shadow-sm md:p-7 ${r.preview ? "border-dashed border-orange/50 opacity-70" : "border-line"}`}>
+                    <Quote className="h-8 w-8 text-orange/40" />
+                    <blockquote className={`mt-3 flex-1 text-base leading-relaxed ${r.preview ? "italic text-muted" : "text-ink"}`}>{r.quote}</blockquote>
+                    <figcaption className="mt-6 flex items-center gap-3 border-t border-line pt-4">
+                      {r.image ? (
+                        <img src={`/${r.image}`} alt="" className="h-10 w-10 rounded-full object-cover" />
+                      ) : (
+                        <span className="grid h-10 w-10 place-items-center rounded-full bg-copper text-sm font-bold text-white">
+                          {r.name?.charAt(0) || "A"}
+                        </span>
+                      )}
+                      <span>
+                        <span className="block text-sm font-bold text-ink">{r.name}</span>
+                        <span className="block text-xs text-muted">{r.detail || "Seminar attendee"}</span>
+                      </span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+
+              <div className="reveal mt-10 text-center">
+                <a
+                  href="#book"
+                  onClick={handleButtonClick}
+                  className="inline-flex items-center gap-2 rounded-full bg-copper px-8 py-4 font-bold text-white shadow-lg shadow-copper/25 transition-all hover:-translate-y-0.5 hover:bg-copper-dark"
+                >
+                  Reserve your seat <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* CASE STUDIES */}
         <section className="bg-white">
           <div className="mx-auto max-w-container px-6 py-14 md:py-20">
@@ -522,63 +748,6 @@ export default function SeminarPage() {
           </div>
         </section>
 
-        {/* SPEAKERS: Kaushi + guest side by side */}
-        <section className="border-t border-line bg-panel">
-          <div className="mx-auto max-w-container px-6 py-14 md:py-20">
-            <div className="reveal mx-auto mb-10 max-w-2xl text-center">
-              <Eyebrow>Your speakers</Eyebrow>
-              <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
-                Learn from the experts
-              </h2>
-              <p className="mt-3 text-base leading-relaxed text-muted">
-                Practical property insights from the people who guide buyers through every step.
-              </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Kaushi */}
-              <article className="reveal d1 flex flex-col overflow-hidden rounded-3xl border border-line bg-white shadow-sm">
-                <div className="photo relative aspect-[4/3] w-full bg-gray-100">
-                  <img src="/kaushi.jpg" alt="Kaushi" className="absolute inset-0 h-full w-full object-cover object-top" />
-                </div>
-                <div className="flex flex-1 flex-col p-7 md:p-8">
-                  <span className="self-start rounded-md bg-orange/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-orange">
-                    Licensed buyer's agent and founder
-                  </span>
-                  <h3 className="mt-4 font-display text-3xl font-extrabold text-ink">Kaushi</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">
-                    An experienced Licensed Buyer's Agent, Kaushi spent years navigating the Australian property market. She built Sunblock Property to bring an analytical, calm, and data-driven approach to property investing, specifically helping migrants, expats, and busy professionals make confident decisions without the sales hype.
-                  </p>
-                </div>
-              </article>
-
-              {/* Guest solicitor */}
-              <article className="reveal d2 flex flex-col overflow-hidden rounded-3xl border border-line bg-white shadow-sm">
-                <div className="photo relative aspect-[4/3] w-full bg-gray-200">
-                  <img src="/solicitor.jpg" alt="Property solicitor" className="absolute inset-0 h-full w-full object-cover object-top" />
-                </div>
-                <div className="flex flex-1 flex-col p-7 md:p-8">
-                  <span className="self-start rounded-md bg-navy/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-navy">
-                    Guest speaker
-                  </span>
-                  <h3 className="mt-4 font-display text-3xl font-extrabold text-ink">Property solicitor</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">
-                    Guiding buyers through contract reviews, off-the-plan terms, title searches, and the key checks that protect a property purchase. You will learn exactly what to look for before you sign, and the common traps that catch first-time investors.
-                  </p>
-                  <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
-                    {["Contract reviews and red flags", "Off-the-plan terms explained", "Title searches and due diligence", "Protecting your purchase"].map((t) => (
-                      <li key={t} className="flex items-start gap-2 text-sm text-ink">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-orange" strokeWidth={3} />
-                        <span>{t}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
         {/* FAQ */}
         <section className="border-t border-line bg-white">
           <div className="mx-auto max-w-3xl px-6 py-14 md:py-20">
@@ -638,6 +807,34 @@ export default function SeminarPage() {
           </div>
         </section>
       </main>
+
+      {/* PHOTO LIGHTBOX */}
+      {lightbox !== null && photos[lightbox] && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setLightbox(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <button type="button" aria-label="Close" onClick={() => setLightbox(null)} className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20">
+            <X className="h-6 w-6" />
+          </button>
+          {photos.length > 1 && (
+            <>
+              <button type="button" aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); setLightbox((lightbox - 1 + photos.length) % photos.length); }} className="absolute left-3 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20">
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button type="button" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); setLightbox((lightbox + 1) % photos.length); }} className="absolute right-3 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20">
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </>
+          )}
+          <figure className="max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+            <img src={`/${photos[lightbox].src}`} alt={photos[lightbox].alt || "Seminar photo"} className="max-h-[80vh] w-auto rounded-xl object-contain" />
+            {photos[lightbox].caption && <figcaption className="mt-3 text-center text-sm text-white/80">{photos[lightbox].caption}</figcaption>}
+          </figure>
+        </div>
+      )}
 
       {/* MOBILE STICKY REGISTER BAR */}
       {status !== "success" && (
