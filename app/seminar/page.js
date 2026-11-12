@@ -613,14 +613,12 @@ export default function SeminarPage() {
 
               <div className={`grid gap-6 ${experts.length > 1 ? "md:grid-cols-2" : "mx-auto max-w-xl"}`}>
                 {experts.map((sp, i) => (
-                  <article key={sp.name} className={`reveal d${(i % 3) + 1} flex flex-col overflow-hidden rounded-3xl border border-line bg-panel shadow-sm sm:flex-row`}>
-                    <div className="photo relative aspect-[4/3] w-full shrink-0 bg-gray-200 sm:aspect-auto sm:w-[42%]">
-                      {sp.image ? (
+                  <article key={sp.name} className={`reveal d${(i % 3) + 1} flex flex-col overflow-hidden rounded-3xl border border-line bg-panel shadow-sm sm:flex-row ${sp.image ? "" : "border-l-4 border-l-orange"}`}>
+                    {sp.image && (
+                      <div className="photo relative aspect-[4/3] w-full shrink-0 bg-gray-200 sm:aspect-auto sm:w-[42%]">
                         <img src={`/${sp.image}`} alt={sp.name} className="absolute inset-0 h-full w-full object-cover object-top" />
-                      ) : (
-                        <span className="tag">Photo coming soon</span>
-                      )}
-                    </div>
+                      </div>
+                    )}
                     <div className="flex flex-1 flex-col p-6 md:p-7">
                       <span className="self-start rounded-md bg-navy/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-navy">
                         {sp.role}
