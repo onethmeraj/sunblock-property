@@ -96,11 +96,14 @@ export default function SeminarPage() {
   const past = s.pastEvent || {};
   const photos = past.photos || [];
   const realReviews = past.reviews || [];
-  // While no real reviews are added, show 4 empty slots on localhost only
-  // so you can see the layout. These never appear on the live site.
-  const previewSlots = process.env.NODE_ENV !== "production" && realReviews.length === 0;
+  // While no real reviews are added, show 4 placeholder slots on localhost
+  // and on Vercel PREVIEW links (for client review). They never appear on
+  // the live production site.
+  const isPreviewBuild =
+    process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_VERCEL_ENV === "preview";
+  const previewSlots = isPreviewBuild && realReviews.length === 0;
   const reviews = previewSlots
-    ? Array.from({ length: 4 }, () => ({ quote: "Review slot. Add a real attendee review in lib/site.js under pastEvent.reviews.", name: "Attendee name", detail: "Seminar attendee", preview: true }))
+    ? Array.from({ length: 4 }, () => ({ quote: "Attendee review coming soon. This space will show real feedback from our Melbourne seminar.", name: "Seminar attendee", detail: "Melbourne, 7 November", preview: true }))
     : realReviews;
   const [lightbox, setLightbox] = useState(null);
 
@@ -567,9 +570,15 @@ export default function SeminarPage() {
                 <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-extrabold leading-[1.12] text-ink">
                   Meet {host.name}
                 </h2>
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2.5">
                   {host.titles.map((t) => (
-                    <span key={t} className="rounded-full bg-orange/10 px-3.5 py-1.5 text-xs font-bold text-orange">{t}</span>
+                    <span
+                      key={t}
+                      className="inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-bold text-white shadow-md"
+                    >
+                      <span className="h-2 w-2 rounded-full bg-orange" />
+                      {t}
+                    </span>
                   ))}
                 </div>
                 <p className="mt-5 text-base leading-relaxed text-muted lg:text-lg">{host.bio}</p>
