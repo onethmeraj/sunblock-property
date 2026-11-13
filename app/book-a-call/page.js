@@ -9,6 +9,8 @@ import { site } from "@/lib/site";
 
 const BUDGETS = ["Under $500k", "$500k – $750k", "$750k – $1M", "$1M – $1.5M", "$1.5M+", "Not sure yet"];
 const TIMELINE = ["Within 3 months", "3 to 6 months", "6 to 12 months", "Just researching"];
+const RESIDENCY = ["Australian citizen", "Permanent resident", "Temporary visa holder", "New Zealand citizen", "Living overseas"];
+const BUYER_TYPES = ["First home buyer", "First time investor", "Experienced investor", "Upgrading my home", "Buying through an SMSF", "Not sure yet"];
 
 const TRUST_BULLETS = [
   "A relaxed, no pressure conversation",
@@ -25,7 +27,8 @@ const REVIEWS = [
 export default function BookACallPage() {
   const [form, setForm] = useState({
     firstName: "", lastName: "", phone: "", email: "",
-    basedIn: "", investedBefore: "", budget: "", timeline: ""
+    basedIn: "", investedBefore: "", budget: "", timeline: "",
+    residencyStatus: "", buyerType: ""
   });
   const [status, setStatus] = useState("idle");
 
@@ -175,6 +178,18 @@ export default function BookACallPage() {
                       <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Investment Profile</span>
                     </div>
 
+                    <div>
+                      <select required className={`${selectClass} ${!form.residencyStatus ? 'text-gray-400' : 'text-ink'}`} value={form.residencyStatus} onChange={set("residencyStatus")}>
+                        <option value="" disabled>Residency status*</option>
+                        {RESIDENCY.map((o) => <option key={o} value={o} className="text-ink">{o}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <select required className={`${selectClass} ${!form.buyerType ? 'text-gray-400' : 'text-ink'}`} value={form.buyerType} onChange={set("buyerType")}>
+                        <option value="" disabled>Buyer type*</option>
+                        {BUYER_TYPES.map((o) => <option key={o} value={o} className="text-ink">{o}</option>)}
+                      </select>
+                    </div>
                     <div>
                       <select required className={`${selectClass} ${!form.budget ? 'text-gray-400' : 'text-ink'}`} value={form.budget} onChange={set("budget")}>
                         <option value="" disabled>Approximate budget*</option>

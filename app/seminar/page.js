@@ -12,6 +12,8 @@ const BUDGETS = ["Under $500k", "$500k to $750k", "$750k to $1M", "$1M to $1.5M"
 const TIMELINE = ["Within 3 months", "3 to 6 months", "6 to 12 months", "Just researching"];
 const RESIDENCY = ["Australian citizen", "Permanent resident", "Temporary visa holder", "New Zealand citizen", "Living overseas"];
 const BUYER_TYPES = ["First home buyer", "First time investor", "Experienced investor", "Upgrading my home", "Buying through an SMSF", "Not sure yet"];
+const BASED_IN = ["Australia", "Overseas"];
+const INVESTED_BEFORE = ["Yes", "No"];
 
 const FAQS = [
   { q: "Is this really free?", a: "Yes, 100% free with no sales pressure. Our goal is to educate you on smart property investing." },
@@ -56,35 +58,6 @@ function Select({ value, onChange, placeholder, options, className }) {
         ))}
       </select>
       <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-    </div>
-  );
-}
-
-// Two-option tap buttons for short Yes/No style questions
-function Choice({ label, value, options, onPick }) {
-  return (
-    <div>
-      <span className="mb-1.5 block text-xs font-semibold text-ink">{label}</span>
-      <div className="grid grid-cols-2 gap-2">
-        {options.map((o) => {
-          const active = value === o.value;
-          return (
-            <button
-              key={o.value}
-              type="button"
-              onClick={() => onPick(o.value)}
-              aria-pressed={active}
-              className={`rounded-xl border px-3 py-2.5 text-sm font-semibold transition-all ${
-                active
-                  ? "border-navy bg-navy text-white shadow-sm"
-                  : "border-line bg-gray-50 text-ink hover:border-navy/40 hover:bg-white"
-              }`}
-            >
-              {o.label}
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -153,19 +126,9 @@ export default function SeminarPage() {
   }, [lightbox, photos.length]);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
-  const pick = (k) => (v) => {
-    setForm((f) => ({ ...f, [k]: v }));
-    setFormError("");
-  };
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    // Tap buttons are not native inputs, so check them here
-    if (!form.basedIn || !form.investedBefore) {
-      setFormError("Please answer where you are based and whether you have invested before.");
-      return;
-    }
 
     setFormError("");
     setStatus("submitting");
@@ -322,27 +285,15 @@ export default function SeminarPage() {
                         <fieldset>
                           <legend className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-navy">
                             <span className="grid h-5 w-5 place-items-center rounded-full bg-navy text-[10px] text-white">2</span>
-                            Your property plans
+                            Investment profile
                           </legend>
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <Select className={selectClass} placeholder="Residency status*" options={RESIDENCY} value={form.residencyStatus} onChange={set("residencyStatus")} />
                             <Select className={selectClass} placeholder="Buyer type*" options={BUYER_TYPES} value={form.buyerType} onChange={set("buyerType")} />
-                            <Select className={selectClass} placeholder="Approx budget*" options={BUDGETS} value={form.budget} onChange={set("budget")} />
-                            <Select className={selectClass} placeholder="Timeline*" options={TIMELINE} value={form.timeline} onChange={set("timeline")} />
-                          </div>
-                          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <Choice
-                              label="Currently based in*"
-                              value={form.basedIn}
-                              onPick={pick("basedIn")}
-                              options={[{ value: "Australia", label: "Australia" }, { value: "Overseas", label: "Overseas" }]}
-                            />
-                            <Choice
-                              label="Invested before?*"
-                              value={form.investedBefore}
-                              onPick={pick("investedBefore")}
-                              options={[{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }]}
-                            />
+                            <Select className={selectClass} placeholder="Approximate budget*" options={BUDGETS} value={form.budget} onChange={set("budget")} />
+                            <Select className={selectClass} placeholder="Purchase timeline*" options={TIMELINE} value={form.timeline} onChange={set("timeline")} />
+                            <Select className={selectClass} placeholder="Currently based in*" options={BASED_IN} value={form.basedIn} onChange={set("basedIn")} />
+                            <Select className={selectClass} placeholder="Invested before?*" options={INVESTED_BEFORE} value={form.investedBefore} onChange={set("investedBefore")} />
                           </div>
                         </fieldset>
 
@@ -624,6 +575,7 @@ export default function SeminarPage() {
                         {sp.role}
                       </span>
                       <h3 className="mt-3 font-display text-2xl font-extrabold text-ink">{sp.name}</h3>
+                      {sp.company && <div className="mt-0.5 text-sm font-semibold text-muted">{sp.company}</div>}
                       <p className="mt-2.5 text-sm leading-relaxed text-muted">{sp.bio}</p>
                       {sp.topics?.length > 0 && (
                         <ul className="mt-4 space-y-2">
