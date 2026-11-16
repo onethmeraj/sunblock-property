@@ -55,11 +55,12 @@ export default function BookACallPage() {
     
     try {
       if (site.forms?.general) {
-        await fetch(site.forms.general, {
+        const res = await fetch(site.forms.general, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, source: "Book A Call Page" }), 
+          body: JSON.stringify({ ...form, source: "Book A Call Page" }),
         });
+        if (!res.ok) throw new Error("Form failed");
       } else {
         await new Promise((r) => setTimeout(r, 800)); 
       }
@@ -144,7 +145,7 @@ export default function BookACallPage() {
             {status === "success" ? (
               <div className="w-full bg-white relative p-2 sm:p-4">
                 <iframe
-                  src="https://api.leadconnectorhq.com/widget/booking/1MzdLOjOF7kLrcs0lCMP"
+                  src="https://api.leadconnectorhq.com/widget/booking/tzyQhDqS7XLs5SdK6hq2"
                   style={{ width: "100%", height: "800px", border: "none" }}
                   scrolling="yes"
                   id="ghl-calendar"
