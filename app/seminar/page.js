@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Icon from "@/components/Icon";
 import { site } from "@/lib/site";
+import { getTrackingFields, makeEventId, trackEvent } from "@/lib/tracking";
 
 const BUDGETS = ["Under $500k", "$500k to $750k", "$750k to $1M", "$1M to $1.5M", "$1.5M+", "Not sure yet"];
 const TIMELINE = ["Within 3 months", "3 to 6 months", "6 to 12 months", "Just researching"];
@@ -138,16 +139,25 @@ export default function SeminarPage() {
         const res = await fetch(site.forms.seminar, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, source: "Seminar Registration" }),
+          body: JSON.stringify({
+            ...form,
+            source: "Seminar Registration",
+            event_id: makeEventId("CompleteRegistration", form.email),
+            ...getTrackingFields(),
+          }),
         });
         if (!res.ok) throw new Error("Request failed");
       } else {
         await new Promise((r) => setTimeout(r, 800));
       }
 
-      if (typeof window !== "undefined" && window.fbq) {
-        window.fbq("track", "Lead");
-      }
+      // Seminar signups are tracked as CompleteRegistration (strategy calls use Lead),
+      // with the same event ID the server uses so Meta counts it once.
+      trackEvent(
+        "CompleteRegistration",
+        { content_name: "seminar_adelaide" },
+        makeEventId("CompleteRegistration", form.email)
+      );
 
       setStatus("success");
     } catch {

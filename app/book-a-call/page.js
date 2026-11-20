@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Check, Star } from "lucide-react";
 import { site } from "@/lib/site";
+import { getTrackingFields, makeEventId, trackEvent } from "@/lib/tracking";
 
 const BUDGETS = ["Under $500k", "$500k – $750k", "$750k – $1M", "$1M – $1.5M", "$1.5M+", "Not sure yet"];
 const TIMELINE = ["Within 3 months", "3 to 6 months", "6 to 12 months", "Just researching"];
@@ -28,7 +29,7 @@ export default function BookACallPage() {
   const [form, setForm] = useState({
     firstName: "", lastName: "", phone: "", email: "",
     basedIn: "", investedBefore: "", budget: "", timeline: "",
-    residencyStatus: "", buyerType: ""
+    residencyStatus: "", buyerType: "", marketingConsent: false
   });
   const [status, setStatus] = useState("idle");
 
@@ -47,6 +48,26 @@ export default function BookACallPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fire Schedule when a booking is completed inside the GHL calendar.
+  // The calendar runs in an iframe and tells this page about the booking
+  // through a postMessage. Fires once per page visit.
+  useEffect(() => {
+    if (status !== "success") return;
+    let fired = false;
+    const onMessage = (e) => {
+      if (fired) return;
+      const fromGhl = /leadconnectorhq\.com|msgsndr\.com|gohighlevel\.com/.test(e.origin || "");
+      if (!fromGhl) return;
+      let text = "";
+      try { text = typeof e.data === "string" ? e.data : JSON.stringify(e.data); } catch { return; }
+      if (!/booking-complete|booking_complete|appointment-booked|appointment_booked/i.test(text)) return;
+      fired = true;
+      trackEvent("Schedule", { content_name: "strategy_call" }, makeEventId("Schedule", form.email));
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [status, form.email]);
+
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   async function handleSubmit(e) {
@@ -58,17 +79,22 @@ export default function BookACallPage() {
         const res = await fetch(site.forms.general, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, source: "Book A Call Page" }),
+          body: JSON.stringify({
+            ...form,
+            marketingConsent: form.marketingConsent ? "Yes" : "No",
+            consentTimestamp: new Date().toISOString(),
+            source: "Book A Call Page",
+            event_id: makeEventId("Lead", form.email),
+            ...getTrackingFields(),
+          }),
         });
         if (!res.ok) throw new Error("Form failed");
       } else {
         await new Promise((r) => setTimeout(r, 800)); 
       }
 
-      // Fire the Meta Pixel Lead event (general page now tracked like the seminar page)
-      if (typeof window !== 'undefined' && window.fbq) {
-        window.fbq('track', 'Lead');
-      }
+      // Lead with the same event ID the server uses, so Meta counts it once
+      trackEvent("Lead", { content_name: "strategy_call" }, makeEventId("Lead", form.email));
 
       setStatus("success");
     } catch {
@@ -217,6 +243,19 @@ export default function BookACallPage() {
                         <option value="No" className="text-ink">No</option>
                       </select>
                     </div>
+
+                    <label className="sm:col-span-2 mt-2 flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={form.marketingConsent}
+                        onChange={(e) => setForm((f) => ({ ...f, marketingConsent: e.target.checked }))}
+                        className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-navy"
+                      />
+                      <span>
+                        I agree to Sunblock Property contacting me by email, phone and SMS about my enquiry, including follow ups and property updates. I can unsubscribe at any time.*
+                      </span>
+                    </label>
                   </div>
 
                   <div className="bg-[#f8fbff] px-5 sm:px-8 md:px-10 py-5 sm:py-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4">

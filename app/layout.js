@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
+import MetaPixelPageView from "@/components/MetaPixelPageView";   // NEW
 import "./globals.css";
 
 // One font instance only. Headings reuse it via --font-display in globals.css,
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${sansFont.variable} scroll-smooth`}>
       <body className="font-sans antialiased">
         {children}
+        <MetaPixelPageView />   {/* NEW */}
 
         {/* Meta Pixel Base Code */}
         <Script id="meta-pixel" strategy="afterInteractive">
